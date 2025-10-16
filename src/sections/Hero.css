@@ -1,0 +1,120 @@
+.hero {
+  position: relative;
+  padding: calc(var(--section-spacing) + 3rem) 0 var(--section-spacing);
+  background: linear-gradient(135deg, rgba(9, 24, 43, 0.94) 0%, rgba(6, 14, 24, 0.9) 55%),
+    url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1600&q=80')
+      center/cover no-repeat;
+  color: #fff;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(13, 30, 45, 0.2), rgba(12, 33, 52, 0.55));
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  align-items: center;
+  gap: clamp(2rem, 7vw, 4rem);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.hero__content {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.hero__chip {
+  align-self: flex-start;
+}
+
+.hero h1 {
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  line-height: 1.12;
+  color: #fff;
+}
+
+.hero p {
+  font-size: 1.05rem;
+  max-width: 500px;
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.hero__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.hero__secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.hero__secondary:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.hero__card {
+  background: rgba(7, 19, 32, 0.85);
+  border-radius: var(--radius);
+  padding: 2rem;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 18px 44px rgba(2, 12, 24, 0.45);
+  display: grid;
+  gap: 1.5rem;
+}
+
+.hero__badge {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  align-items: flex-start;
+  padding: 1rem 1.4rem;
+  border-radius: 14px;
+  background: rgba(242, 160, 7, 0.2);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.hero__badge span {
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.hero__stat h3 {
+  color: #fff;
+  margin-bottom: 0.4rem;
+}
+
+.hero__stat p {
+  color: rgba(255, 255, 255, 0.68);
+}
+
+@media (max-width: 640px) {
+  .hero {
+    text-align: center;
+  }
+
+  .hero__content,
+  .hero__actions {
+    justify-content: center;
+  }
+
+  .hero__card {
+    text-align: left;
+  }
+}

@@ -1,0 +1,113 @@
+.about {
+  padding: var(--section-spacing) 0;
+}
+
+.about__inner {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  align-items: center;
+}
+
+.about__media {
+  position: relative;
+  min-height: 360px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.about__image {
+  position: absolute;
+  inset: 0;
+  background: url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=900&q=80')
+      center/cover no-repeat;
+  filter: saturate(0.9);
+}
+
+.about__overlay {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  padding: 1.4rem;
+  border-radius: 14px;
+  background: rgba(5, 16, 30, 0.82);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.about__overlay-badge {
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #0b1824;
+  font-weight: 600;
+}
+
+.about__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.about h2 {
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  margin-top: 0.5rem;
+}
+
+.about p {
+  font-size: 1.05rem;
+}
+
+.about__highlights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  padding: 0;
+  margin: 2rem 0;
+  list-style: none;
+}
+
+.about__highlights li {
+  background: #fff;
+  padding: 1.6rem;
+  border-radius: var(--radius);
+  box-shadow: 0 16px 40px rgba(11, 24, 37, 0.16);
+  display: grid;
+  gap: 0.4rem;
+}
+
+.about__highlights span {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1;
+}
+
+.about__cta {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.about__phone {
+  font-weight: 600;
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+@media (max-width: 560px) {
+  .about__overlay {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
