@@ -14,15 +14,15 @@ export function Contact() {
           <div className="contact__options">
             <div>
               <h3>Telefon</h3>
-              <a href="tel:+49891234567">089 / 123 45 67</a>
+            <a href="tel:+498936109524">089 361 095 24</a>
             </div>
             <div>
               <h3>Email</h3>
-              <a href="mailto:service@schnitter-haustechnik.de">service@schnitter-haustechnik.de</a>
+              <a href="mailto:haustechnik@schnittergbr.de">haustechnik@schnittergbr.de</a>
             </div>
             <div>
-              <h3>Adresse</h3>
-              <p>Schleißheimer Str. 123<br />80797 München</p>
+            <h3>Adresse</h3>
+            <p>Bahnweg 51, 85774 Unterföhring</p>
             </div>
           </div>
         </div>
@@ -40,8 +40,8 @@ export function Contact() {
             <input id="phone" name="phone" type="tel" placeholder="+49 ..." />
           </div>
           <div className="contact__group">
-            <label htmlFor="message">Projektbeschreibung</label>
-            <textarea id="message" name="message" rows="4" placeholder="Worum geht es in Ihrem Projekt?" />
+            <label htmlFor="message">Ihre Nachricht</label>
+            <textarea id="message" name="message" rows="4" placeholder="Teile Sie uns etwas mit." />
           </div>
           <button type="submit" className="accent-button contact__submit">
             Anfrage senden

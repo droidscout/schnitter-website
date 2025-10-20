@@ -32,8 +32,8 @@ export function About() {
             <a className="accent-button" href="#contact">
               Beratung anfordern
             </a>
-            <a className="about__phone" href="tel:+49891234567">
-              089 / 123 45 67
+            <a className="about__phone" href="tel:+498936109524">
+              089 361 095 24
             </a>
           </div>
         </div>

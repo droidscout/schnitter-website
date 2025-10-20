@@ -1,0 +1,22 @@
+.impressum {
+  padding: var(--section-spacing) 0;
+}
+
+.impressum__inner {
+  background: #fff;
+  border-radius: calc(var(--radius) + 8px);
+  box-shadow: 0 30px 70px rgba(6, 16, 30, 0.18);
+  padding: clamp(2rem, 5vw, 3rem);
+  display: grid;
+  gap: 0.8rem;
+}
+
+.impressum h2 {
+  font-size: clamp(1.6rem, 3vw, 2rem);
+}
+
+.impressum p a {
+  color: var(--primary);
+  font-weight: 600;
+}
+

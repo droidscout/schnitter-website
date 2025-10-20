@@ -23,6 +23,9 @@ body {
   background: var(--background);
   line-height: 1.6;
   scroll-behavior: smooth;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 h1,
@@ -60,6 +63,11 @@ button {
 .container {
   width: min(1100px, 92%);
   margin: 0 auto;
+}
+
+/* Ensure footer sits at viewport bottom when content is short */
+main {
+  flex: 1 0 auto;
 }
 
 /* Offset anchor scrolling for sticky header */

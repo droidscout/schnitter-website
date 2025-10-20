@@ -11,8 +11,8 @@ export function Footer() {
         <div className="footer__info">
           <div>
             <h4>Kontakt</h4>
-            <a href="tel:+49891234567">089 / 123 45 67</a>
-            <a href="mailto:service@schnitter-haustechnik.de">service@schnitter-haustechnik.de</a>
+            <a href="tel:+498936109524">089 361 095 24</a>
+            <a href="mailto:haustechnik@schnittergbr.de">haustechnik@schnittergbr.de</a>
           </div>
           <div>
             <h4>Bürozeiten</h4>
@@ -25,8 +25,8 @@ export function Footer() {
         <div className="container footer__bottom-inner">
           <span>© {new Date().getFullYear()} Schnitter Haustechnik</span>
           <div className="footer__links">
-            <a href="#impressum">Impressum</a>
-            <a href="#datenschutz">Datenschutz</a>
+            <a href="/impressum">Impressum</a>
+            <a href="/datenschutz">Datenschutz</a>
           </div>
         </div>
       </div>
