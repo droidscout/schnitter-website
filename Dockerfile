@@ -6,6 +6,7 @@ RUN apk add --no-cache git
 # Build args: provide your repository URL and optional ref (branch/tag/commit)
 ARG REPO_URL=https://github.com/droidscout/schnitter-website.git
 ARG REPO_REF=master
+ARG VITE_API_BASE_URL
 
 WORKDIR /app
 
@@ -20,6 +21,7 @@ RUN git clone --depth 1 "$REPO_URL" /app \
      fi
 
 # Install dependencies and build
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 RUN if [ -f package-lock.json ]; then \
       npm ci --no-audit --no-fund; \
     else \
@@ -37,4 +39,3 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
-

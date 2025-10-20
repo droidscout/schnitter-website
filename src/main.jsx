@@ -3,12 +3,18 @@ import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import ImpressumPage from './pages/ImpressumPage.jsx';
 import DatenschutzPage from './pages/DatenschutzPage.jsx';
+import ThankYouPage from './pages/ThankYouPage.jsx';
 import './index.css';
 
-const path = window.location.pathname.replace(/\/+$/, '');
+let path = window.location.pathname.replace(/\/+$/, '');
+// Support deployment under sub-path like /schnitter
+if (path.startsWith('/schnitter')) {
+  path = path.slice('/schnitter'.length) || '/';
+}
 const isImpressum = path === '/impressum';
 const isDatenschutz = path === '/datenschutz';
-const Root = isImpressum ? ImpressumPage : isDatenschutz ? DatenschutzPage : App;
+const isDanke = path === '/danke';
+const Root = isImpressum ? ImpressumPage : isDatenschutz ? DatenschutzPage : isDanke ? ThankYouPage : App;
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

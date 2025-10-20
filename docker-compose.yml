@@ -1,6 +1,23 @@
 version: "3.9"
 
 services:
+  api:
+    build:
+      context: ./server
+    environment:
+      - CONTACT_RECEIVER_EMAIL=${CONTACT_RECEIVER_EMAIL:-haustechnik@schnittergbr.de}
+      - FRONTEND_BASE_URL=${FRONTEND_BASE_URL:-http://localhost:8080}
+      # SMTP configuration (set for real sending)
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_SECURE=${SMTP_SECURE}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - TOKEN_TTL_MINUTES=${TOKEN_TTL_MINUTES:-60}
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
   web:
     build:
       context: .
@@ -11,15 +28,25 @@ services:
         REPO_URL: ${REPO_URL}
         # Optional: branch, tag, or commit to checkout (defaults to main)
         REPO_REF: ${REPO_REF:-main}
+        # API base URL for frontend; with nginx proxy, use "/api"
+        VITE_API_BASE_URL: /api
     ports:
       - "8080:80"
+    depends_on:
+      - api
     restart: unless-stopped
 
 # Usage:
 # 1) Create a .env file next to this compose with:
 #      REPO_URL=https://github.com/your-org/your-repo.git
 #      REPO_REF=main
+#      CONTACT_RECEIVER_EMAIL=haustechnik@schnittergbr.de
+#      FRONTEND_BASE_URL=http://localhost:8080
+#      SMTP_HOST=smtp.example.com
+#      SMTP_PORT=587
+#      SMTP_SECURE=false
+#      SMTP_USER=mailer
+#      SMTP_PASS=secret
 # 2) Build and run:
 #      docker compose up -d --build
 # 3) Open http://localhost:8080
-
