@@ -22,7 +22,12 @@
   font-weight: 700;
   letter-spacing: 0.04em;
   color: #fff;
-  text-transform: uppercase;
+}
+
+.header__logo-img {
+  height: 95px;
+  width: auto;
+  display: block;
 }
 
 .header__logo-mark {
@@ -72,5 +77,9 @@
   .header__cta {
     width: 100%;
     justify-content: center;
+  }
+
+  .header__logo-img {
+    height: 60px;
   }
 }

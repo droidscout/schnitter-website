@@ -12,9 +12,8 @@ export function Header() {
   return (
     <header className="header">
       <div className="container header__inner">
-        <a className="header__logo" href="#hero">
-          <span className="header__logo-mark">S</span>
-          Schnitter Haustechnik
+        <a className="header__logo" href="#hero" aria-label="Schnitter Haustechnik">
+          <img className="header__logo-img" src="/images/Schnitter-GBR.png" alt="Schnitter Haustechnik Logo" />
         </a>
         <nav className="header__nav">
           {navigation.map((item) => (
@@ -30,4 +29,3 @@ export function Header() {
     </header>
   );
 }
-

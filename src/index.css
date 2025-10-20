@@ -1,7 +1,7 @@
 :root {
-  --primary: #0d1e2d;
-  --primary-dark: #06111d;
-  --accent: #f2a007;
+  --primary: #951e24;
+  --primary-dark: #5f1317;
+  --accent: #951e24;
   --background: #f4f7fb;
   --text: #1f2a36;
   --text-light: #546178;
@@ -62,6 +62,17 @@ button {
   margin: 0 auto;
 }
 
+/* Offset anchor scrolling for sticky header */
+:where(section[id]) {
+  scroll-margin-top: 110px;
+}
+
+@media (max-width: 540px) {
+  :where(section[id]) {
+    scroll-margin-top: 80px;
+  }
+}
+
 .accent-button {
   display: inline-flex;
   align-items: center;
@@ -69,16 +80,16 @@ button {
   padding: 0.85rem 1.75rem;
   border-radius: 999px;
   background: var(--accent);
-  color: #0b1824;
+  color: #fff;
   font-weight: 600;
   letter-spacing: 0.02em;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 12px 24px rgba(242, 160, 7, 0.28);
+  box-shadow: 0 12px 24px rgba(149, 30, 36, 0.28);
 }
 
 .accent-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 18px 34px rgba(242, 160, 7, 0.32);
+  box-shadow: 0 18px 34px rgba(149, 30, 36, 0.32);
 }
 
 .chip {

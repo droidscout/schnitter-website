@@ -78,7 +78,7 @@
 .contact__group textarea:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(242, 160, 7, 0.28);
+  box-shadow: 0 0 0 3px rgba(149, 30, 36, 0.28);
   background: #fff;
 }
 

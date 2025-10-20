@@ -50,7 +50,7 @@
   width: 120%;
   height: 120px;
   transform: translateX(-50%);
-  background: linear-gradient(135deg, rgba(242, 160, 7, 0.38), rgba(242, 160, 7, 0));
+  background: linear-gradient(135deg, rgba(149, 30, 36, 0.38), rgba(149, 30, 36, 0));
   opacity: 0;
   transition: opacity 0.25s ease;
 }
