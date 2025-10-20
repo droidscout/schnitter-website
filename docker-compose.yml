@@ -12,7 +12,7 @@ services:
         # Optional: branch, tag, or commit to checkout (defaults to main)
         REPO_REF: ${REPO_REF:-main}
     ports:
-      - "8080:80"
+      - "8079:80"
     restart: unless-stopped
 
 # Usage:
