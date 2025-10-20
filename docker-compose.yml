@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Set your Git repository URL here (HTTPS). Example:
+        # REPO_URL: https://github.com/your-org/your-repo.git
+        REPO_URL: ${REPO_URL}
+        # Optional: branch, tag, or commit to checkout (defaults to main)
+        REPO_REF: ${REPO_REF:-main}
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+
+# Usage:
+# 1) Create a .env file next to this compose with:
+#      REPO_URL=https://github.com/your-org/your-repo.git
+#      REPO_REF=main
+# 2) Build and run:
+#      docker compose up -d --build
+# 3) Open http://localhost:8080
+
