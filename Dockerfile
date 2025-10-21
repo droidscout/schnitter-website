@@ -4,7 +4,7 @@ FROM node:20-alpine AS builder
 RUN apk add --no-cache git
 
 # Build args: provide your repository URL and optional ref (branch/tag/commit)
-ARG REPO_URL=https://github.com/droidscout/schnitter-website.git
+ARG REPO_URL="https://github.com/droidscout/schnitter-website.git"
 ARG REPO_REF=master
 ARG VITE_API_BASE_URL
 
@@ -35,7 +35,7 @@ FROM nginx:alpine AS runner
 COPY infra/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Static assets built by Vite
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/dist /usr/share/nginx/html/schnitter
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
