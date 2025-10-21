@@ -1,6 +1,28 @@
 import './Contact.css';
 
 export function Contact() {
+  function handleSubmit(e) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const data = Object.fromEntries(new FormData(form).entries());
+    fetch(`${import.meta.env.VITE_API_BASE_URL || ''}/api/contact`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        message: data.message,
+      }),
+    })
+      .then(async (r) => {
+        const j = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(j.error || 'Senden fehlgeschlagen');
+        alert('Vielen Dank! Bitte bestätigen Sie Ihre E-Mail über den zugesandten Link.');
+        form.reset();
+      })
+      .catch((err) => alert(err.message || 'Ein Fehler ist aufgetreten.'));
+  }
   return (
     <section id="contact" className="contact">
       <div className="container contact__inner">
@@ -26,7 +48,7 @@ export function Contact() {
             </div>
           </div>
         </div>
-        <form className="contact__form">
+        <form className="contact__form" onSubmit={handleSubmit}>
           <div className="contact__group">
             <label htmlFor="name">Name</label>
             <input id="name" name="name" type="text" placeholder="Max Mustermann" required />
