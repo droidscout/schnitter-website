@@ -10,6 +10,7 @@ let path = window.location.pathname.replace(/\/+$/, '');
 // Support deployment under sub-path like /schnitter
 if (path.startsWith('/schnitter')) {
   path = path.slice('/schnitter'.length) || '/';
+  console.log("Path: ", path);
 }
 const isImpressum = path === 'schnitter/impressum';
 const isDatenschutz = path === 'schnitter/datenschutz';
