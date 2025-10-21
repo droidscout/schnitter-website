@@ -12,9 +12,9 @@ if (path.startsWith('/schnitter')) {
   path = path.slice('/schnitter'.length) || '/';
   console.log("Path: ", path);
 }
-const isImpressum = path === 'schnitter/impressum';
-const isDatenschutz = path === 'schnitter/datenschutz';
-const isDanke = path === 'schnitter/danke';
+const isImpressum = path === '/impressum';
+const isDatenschutz = path === '/datenschutz';
+const isDanke = path === '/danke';
 const Root = isImpressum ? ImpressumPage : isDatenschutz ? DatenschutzPage : isDanke ? ThankYouPage : App;
 
 ReactDOM.createRoot(document.getElementById('root')).render(
