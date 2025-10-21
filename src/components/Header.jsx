@@ -15,7 +15,7 @@ export function Header() {
         </a>
         <nav className="header__nav">
           {navigation.map((item) => (
-            <a key={item.label} href={item.href} className="header__link">
+            <a key={item.label} href={`/schnitter/${item.href}`} className="header__link">
               {item.label}
             </a>
           ))}
