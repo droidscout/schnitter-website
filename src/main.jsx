@@ -11,9 +11,9 @@ let path = window.location.pathname.replace(/\/+$/, '');
 if (path.startsWith('/schnitter')) {
   path = path.slice('/schnitter'.length) || '/';
 }
-const isImpressum = path === '/impressum';
-const isDatenschutz = path === '/datenschutz';
-const isDanke = path === '/danke';
+const isImpressum = path === 'schnitter/impressum';
+const isDatenschutz = path === 'schnitter/datenschutz';
+const isDanke = path === 'schnitter/danke';
 const Root = isImpressum ? ImpressumPage : isDatenschutz ? DatenschutzPage : isDanke ? ThankYouPage : App;
 
 ReactDOM.createRoot(document.getElementById('root')).render(
