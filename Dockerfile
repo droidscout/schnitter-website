@@ -22,11 +22,7 @@ RUN git clone --depth 1 "$REPO_URL" /app \
 
 # Install dependencies and build
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
-RUN if [ -f package-lock.json ]; then \
-      npm ci --no-audit --no-fund; \
-    else \
-      npm install --no-audit --no-fund; \
-    fi
+RUN npm install --no-audit --no-fund; 
 RUN npm run build
 
 FROM nginx:alpine AS runner
