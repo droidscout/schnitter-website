@@ -38,7 +38,7 @@ function makeTransporter() {
 
 const transporter = makeTransporter();
 
-app.post('/contact', async (req, res) => {
+app.post('/api/contact', async (req, res) => {
   const { name, email, phone, message } = req.body || {};
   if (!email || !name) {
     return res.status(400).json({ ok: false, error: 'Name und E-Mail sind erforderlich.' });
@@ -72,7 +72,7 @@ app.post('/contact', async (req, res) => {
   return res.json({ ok: true, message: 'Bitte bestätigen Sie Ihre E-Mail. Wir haben Ihnen einen Link geschickt.' });
 });
 
-app.get('/confirm', async (req, res) => {
+app.get('/api/confirm', async (req, res) => {
   const { token } = req.query;
   const record = tokens.get(token);
   if (!record) return res.status(400).send('Ungültiger oder abgelaufener Token.');
@@ -99,7 +99,7 @@ app.get('/confirm', async (req, res) => {
   res.redirect(302, target);
 });
 
-app.get('/health', (req, res) => res.json({ ok: true }));
+app.get('/api/health', (req, res) => res.json({ ok: true }));
 
 app.listen(PORT, () => console.log(`Contact API listening on :${PORT}`));
 
