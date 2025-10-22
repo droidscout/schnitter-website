@@ -38,7 +38,7 @@ function makeTransporter() {
 
 const transporter = makeTransporter();
 
-app.post('/api/contact', async (req, res) => {
+app.post('/contact', async (req, res) => {
   const { name, email, phone, message } = req.body || {};
   if (!email || !name) {
     return res.status(400).json({ ok: false, error: 'Name und E-Mail sind erforderlich.' });
