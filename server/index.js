@@ -19,16 +19,53 @@ app.use(express.json());
 const tokens = new Map();
 
 function makeTransporter() {
-  const { SMTP_HOST, SMTP_PORT, SMTP_SECURE, SMTP_USER, SMTP_PASS } = process.env;
-  if (SMTP_HOST && SMTP_PORT && SMTP_USER && SMTP_PASS) {
+  const {
+    SMTP_HOST,
+    SMTP_PORT,
+    SMTP_SECURE,
+    SMTP_USER,
+    SMTP_PASS,
+    SMTP_REQUIRE_TLS,
+    SMTP_TLS_MIN_VERSION,
+    SMTP_TLS_REJECT_INVALID,
+    NODE_ENV,
+  } = process.env;
+
+  const haveCreds = !!(SMTP_HOST && SMTP_USER && SMTP_PASS);
+
+  if (haveCreds) {
+    const secure = String(SMTP_SECURE || 'false') === 'true'; // SMTPS (implicit TLS)
+    const requireTLS = String(SMTP_REQUIRE_TLS || (!secure ? 'true' : 'false')) === 'true'; // STARTTLS enforcement when not using implicit TLS
+    const port = Number(SMTP_PORT || (secure ? 465 : 587));
+
+    // Enforce TLS-only in production
+    if (NODE_ENV === 'production' && !secure && !requireTLS) {
+      throw new Error('SMTP security required: set SMTP_SECURE=true (465) or SMTP_REQUIRE_TLS=true (587).');
+    }
+
+    const enableDebug = String(process.env.SMTP_DEBUG || 'false') === 'true';
     return nodemailer.createTransport({
       host: SMTP_HOST,
-      port: Number(SMTP_PORT),
-      secure: String(SMTP_SECURE || 'false') === 'true',
+      port,
+      secure, // true = SMTPS (implicit TLS)
+      requireTLS, // true = STARTTLS is required when secure=false
+      tls: {
+        minVersion: SMTP_TLS_MIN_VERSION || 'TLSv1.2',
+        rejectUnauthorized: String(SMTP_TLS_REJECT_INVALID || 'true') === 'true',
+      },
+      // Enforce AUTH LOGIN unless overridden
+      authMethod: (process.env.SMTP_AUTH_METHOD || 'LOGIN').toUpperCase(),
       auth: { user: SMTP_USER, pass: SMTP_PASS },
+      logger: enableDebug,
+      debug: enableDebug,
     });
   }
-  // Fallback: stream to console
+
+  // Fallback for local dev without SMTP credentials
+  if (NODE_ENV === 'production') {
+    throw new Error('SMTP not configured. Set SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, and security variables.');
+  }
+
   return nodemailer.createTransport({
     streamTransport: true,
     newline: 'unix',
@@ -102,4 +139,3 @@ app.get('/api/confirm', async (req, res) => {
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 
 app.listen(PORT, () => console.log(`Contact API listening on :${PORT}`));
-

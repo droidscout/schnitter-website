@@ -8,6 +8,7 @@ services:
       # SMTP configuration (set for real sending)
       - SMTP_HOST=${SMTP_HOST}
       - SMTP_PORT=${SMTP_PORT}
+      - SMTP_AUTH_METHOD=${SMTP_AUTH_METHOD:-LOGIN}
       - SMTP_SECURE=${SMTP_SECURE}
       - SMTP_USER=${SMTP_USER}
       - SMTP_PASS=${SMTP_PASS}
