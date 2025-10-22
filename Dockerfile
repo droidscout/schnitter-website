@@ -30,6 +30,8 @@ FROM nginx:alpine AS runner
 # NGINX configuration for SPA routing
 COPY infra/nginx.conf /etc/nginx/conf.d/default.conf
 
+# Copy .env file
+COPY .env /usr/share/nginx/html/schnitter/.env
 # Static assets built by Vite
 COPY --from=builder /app/dist /usr/share/nginx/html/schnitter
 
