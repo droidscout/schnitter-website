@@ -27,7 +27,7 @@ services:
         # Optional: branch, tag, or commit to checkout (defaults to main)
         REPO_REF: ${REPO_REF:-main}
         # API base URL for frontend; with nginx proxy, use "/api"
-        VITE_API_BASE_URL: /api
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-/api}
     ports:
       - "8079:80"
     depends_on:
