@@ -3,7 +3,7 @@ services:
     build:
       context: ./server
     environment:
-      - CONTACT_RECEIVER_EMAIL=${CONTACT_RECEIVER_EMAIL:-haustechnik@schnittergbr.de}
+      - CONTACT_RECEIVER_EMAIL=${CONTACT_RECEIVER_EMAIL:-ralph.loser@posteo.de}
       - FRONTEND_BASE_URL=${FRONTEND_BASE_URL:-http://localhost:8080}
       # SMTP configuration (set for real sending)
       - SMTP_HOST=${SMTP_HOST}
