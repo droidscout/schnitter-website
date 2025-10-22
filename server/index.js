@@ -13,7 +13,7 @@ const CONTACT_RECEIVER_EMAIL = process.env.CONTACT_RECEIVER_EMAIL || 'ralph.lose
 const TOKEN_TTL_MINUTES = parseInt(process.env.TOKEN_TTL_MINUTES || '60', 10);
 
 // CORS: allow frontend origin + handle preflight
-const corsOptions = { origin: new URL(VITE_API_BASE_URL).origin, credentials: false };
+const corsOptions = { origin: new URL(FRONTEND_BASE_URL).origin, credentials: false };
 app.use(cors(corsOptions));
 app.options('/api/*', cors(corsOptions));
 app.use(express.json());
