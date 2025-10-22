@@ -5,7 +5,8 @@ export function Contact() {
     e.preventDefault();
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
-    fetch(`${import.meta.env.VITE_API_BASE_URL || ''}/contact`, {
+    console.log("URL ", `${import.meta.env.VITE_API_BASE_URL || ''}`);
+    fetch(`${import.meta.env.VITE_API_BASE_URL || ''}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
