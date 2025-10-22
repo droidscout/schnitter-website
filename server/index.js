@@ -11,8 +11,10 @@ const FRONTEND_BASE_URL = process.env.FRONTEND_BASE_URL || 'http://localhost:808
 const CONTACT_RECEIVER_EMAIL = process.env.CONTACT_RECEIVER_EMAIL || 'ralph.loser@posteo.de';
 const TOKEN_TTL_MINUTES = parseInt(process.env.TOKEN_TTL_MINUTES || '60', 10);
 
-// CORS: allow frontend origin
-app.use(cors({ origin: new URL(FRONTEND_BASE_URL).origin, credentials: false }));
+// CORS: allow frontend origin + handle preflight
+const corsOptions = { origin: new URL(VITE_API_BASE_URL).origin, credentials: false };
+app.use(cors(corsOptions));
+app.options('/api/*', cors(corsOptions));
 app.use(express.json());
 
 // In-memory token store
