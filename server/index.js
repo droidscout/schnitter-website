@@ -94,8 +94,8 @@ app.post('/api/contact', async (req, res) => {
     from: CONTACT_RECEIVER_EMAIL,
     to: email,
     subject: 'Bitte bestätigen Sie Ihre Anfrage (Double-Opt-In)',
-    text: `Hallo ${name},\n\nbitte bestätigen Sie Ihre Anfrage, indem Sie auf folgenden Link klicken:\n${VITE_API_BASE_URL.replace(/\/+$/, '')}/api/confirm?token=${token}\n\nVielen Dank!`,
-    html: `<p>Hallo ${name},</p><p>bitte bestätigen Sie Ihre Anfrage, indem Sie auf folgenden Link klicken:</p><p><a href="${VITE_API_BASE_URL.replace(/\/+$/, '')}/api/confirm?token=${token}">Anfrage bestätigen</a></p><p>Vielen Dank!</p>`
+    text: `Hallo ${name},\n\nbitte bestätigen Sie Ihre Anfrage, indem Sie auf folgenden Link klicken:\n${FRONTEND_BASE_URL.replace(/\/+$/, '')}/api/confirm?token=${token}\n\nVielen Dank!`,
+    html: `<p>Hallo ${name},</p><p>bitte bestätigen Sie Ihre Anfrage, indem Sie auf folgenden Link klicken:</p><p><a href="${FRONTEND_BASE_URL.replace(/\/+$/, '')}/api/confirm?token=${token}">Anfrage bestätigen</a></p><p>Vielen Dank!</p>`
   };
 
   try {
