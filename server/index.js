@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 3000;
 
 // Config
 const FRONTEND_BASE_URL = process.env.FRONTEND_BASE_URL || 'http://localhost:8080';
+const THANK_YOU_PAGE_URL = process.env.THANK_YOU_PAGE_URL || '/danke';
 const CONTACT_RECEIVER_EMAIL = process.env.CONTACT_RECEIVER_EMAIL || 'ralph.loser@posteo.de';
 const TOKEN_TTL_MINUTES = parseInt(process.env.TOKEN_TTL_MINUTES || '60', 10);
 
@@ -134,7 +135,7 @@ app.get('/api/confirm', async (req, res) => {
 
   tokens.delete(token);
   // Redirect to thank-you page on frontend
-  const target = `${FRONTEND_BASE_URL.replace(/\/+$/, '')}/danke`;
+  const target = `${FRONTEND_BASE_URL.replace(/\/+$/, '')}${THANK_YOU_PAGE_URL}`;
   res.redirect(302, target);
 });
 

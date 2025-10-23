@@ -9,7 +9,7 @@ export default function ThankYouPage() {
       <main>
         <section className="datenschutz">
           <div className="container datenschutz__inner">
-            <h1>Danke!</h1>
+            <h1>Vielen Dank für Ihre Kontaktanfrage!</h1>
             <p>Ihre Anfrage wurde bestätigt und an uns übermittelt.</p>
             <p>
               <a href="/">Zurück zur Startseite</a>
