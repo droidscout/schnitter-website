@@ -28,6 +28,13 @@ body {
   min-height: 100vh;
 }
 
+/* Make the React root a flex column to push footer down */
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 h1,
 h2,
 h3,

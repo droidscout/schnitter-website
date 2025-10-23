@@ -5,6 +5,7 @@ services:
     environment:
       - CONTACT_RECEIVER_EMAIL=${CONTACT_RECEIVER_EMAIL:-ralph.loser@posteo.de}
       - FRONTEND_BASE_URL=${FRONTEND_BASE_URL:-http://localhost:8080}
+      - THANK_YOU_PAGE_URL=${THANK_YOU_PAGE_URL:-/danke}
       # SMTP configuration (set for real sending)
       - SMTP_HOST=${SMTP_HOST}
       - SMTP_PORT=${SMTP_PORT}
