@@ -31,7 +31,7 @@ services:
         # API base URL for frontend; with nginx proxy, use "/api"
         VITE_API_BASE_URL: ${VITE_API_BASE_URL:-/api}
     ports:
-      - "8079:80"
+      - "80:80"
     depends_on:
       - api
     restart: unless-stopped
