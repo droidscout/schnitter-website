@@ -5,7 +5,7 @@ export function Footer() {
     <footer className="footer">
       <div className="container footer__inner">
         <div>
-          <span className="footer__logo">Schnitter Haustechnik</span>
+          <span className="footer__logo">Schnitter GbR Haustechnik</span>
           <p>Ihr Partner für Sanitär, Heizung und Klimatechnik in München und Umgebung.</p>
         </div>
         <div className="footer__info">

@@ -7,6 +7,7 @@ RUN apk add --no-cache git
 ARG REPO_URL="https://github.com/droidscout/schnitter-website.git"
 # ARG REPO_REF=master
 ARG VITE_API_BASE_URL
+ARG VITE_RECAPTCHA_SITE_KEY
 
 WORKDIR /app
 
@@ -22,6 +23,7 @@ RUN git clone "$REPO_URL" /app \
 
 # Install dependencies and build
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
+ENV VITE_RECAPTCHA_SITE_KEY=${VITE_RECAPTCHA_SITE_KEY}
 RUN npm install --no-audit --no-fund; 
 RUN npm run build
 

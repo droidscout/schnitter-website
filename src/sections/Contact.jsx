@@ -1,10 +1,59 @@
 import './Contact.css';
+import { useEffect, useRef } from 'react';
 
 export function Contact() {
-  function handleSubmit(e) {
+  const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+  const recaptchaReadyRef = useRef(null);
+
+  useEffect(() => {
+    if (!siteKey) return; // allow dev without key
+    if (window.grecaptcha && window.grecaptcha.execute) return; // already loaded
+
+    // load reCAPTCHA v3 script dynamically with site key
+    const script = document.createElement('script');
+    script.src = `https://www.google.com/recaptcha/enterprise.js?render=${encodeURIComponent(siteKey)}`;
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+
+    recaptchaReadyRef.current = new Promise((resolve) => {
+      window.grecaptchaReadyCallbacks = window.grecaptchaReadyCallbacks || [];
+      window.grecaptchaReadyCallbacks.push(resolve);
+    });
+
+    script.onload = () => {
+      if (window.grecaptcha && window.grecaptcha.ready) {
+        window.grecaptcha.ready(() => {
+          const callbacks = window.grecaptchaReadyCallbacks || [];
+          callbacks.forEach((cb) => cb());
+          window.grecaptchaReadyCallbacks = [];
+        });
+      }
+    };
+
+    return () => {
+      // keep script for page lifetime
+    };
+  }, [siteKey]);
+
+  async function getRecaptchaToken() {
+    if (!siteKey) return null;
+    // ensure grecaptcha is ready
+    if (recaptchaReadyRef.current) await recaptchaReadyRef.current;
+    if (!(window.grecaptcha && window.grecaptcha.execute)) return null;
+    try {
+      const token = await window.grecaptcha.execute(siteKey, { action: 'contact' });
+      return token;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  async function handleSubmit(e) {
     e.preventDefault();
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
+    const recaptchaToken = await getRecaptchaToken();
     fetch(`${import.meta.env.VITE_API_BASE_URL || ''}/contact`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -13,6 +62,7 @@ export function Contact() {
         email: data.email,
         phone: data.phone,
         message: data.message,
+        recaptchaToken,
       }),
     })
       .then(async (r) => {

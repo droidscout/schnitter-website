@@ -59,7 +59,7 @@ export const testimonials = [
   },
   {
     quote:
-      'Von der Planung bis zur Umsetzung zuverlässig und professionell. Wir empfehlen Schnitter Haustechnik weiter.',
+      'Von der Planung bis zur Umsetzung zuverlässig und professionell. Wir empfehlen Schnitter GbR Haustechnik weiter.',
     author: 'Thomas S. · Architekturbüro Schwabing',
   },
 ];

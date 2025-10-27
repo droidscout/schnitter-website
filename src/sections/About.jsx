@@ -16,7 +16,7 @@ export function About() {
           <span className="about__eyebrow">Über uns</span>
           <h2>Technik, die begeistert und Bestand hat</h2>
           <p>
-            Schnitter Haustechnik steht für zuverlässige Projektabwicklung, saubere Ausführung und nachhaltige Anlagen.
+            Schnitter GbR Haustechnik steht für zuverlässige Projektabwicklung, saubere Ausführung und nachhaltige Anlagen.
             Unser Team aus Meister:innen, Techniker:innen und Monteur:innen setzt auf hochwertige Markenprodukte und
             transparente Kommunikation.
           </p>

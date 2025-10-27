@@ -6,6 +6,10 @@ services:
       - CONTACT_RECEIVER_EMAIL=${CONTACT_RECEIVER_EMAIL:-ralph.loser@posteo.de}
       - FRONTEND_BASE_URL=${FRONTEND_BASE_URL:-http://localhost:8080}
       - THANK_YOU_PAGE_URL=${THANK_YOU_PAGE_URL:-/danke}
+      - ALLOWED_SOURCE_IP=${ALLOWED_SOURCE_IP:-172.28.0.10}
+      - RATE_LIMIT_WINDOW_MS=${RATE_LIMIT_WINDOW_MS:-60000}
+      - RATE_LIMIT_MAX=${RATE_LIMIT_MAX:-10}
+      - RECAPTCHA_SECRET_KEY=${RECAPTCHA_SECRET_KEY}
       # SMTP configuration (set for real sending)
       - SMTP_HOST=${SMTP_HOST}
       - SMTP_PORT=${SMTP_PORT}
@@ -13,9 +17,13 @@ services:
       - SMTP_SECURE=${SMTP_SECURE}
       - SMTP_USER=${SMTP_USER}
       - SMTP_PASS=${SMTP_PASS}
+      - RUNTIME_ENV=${RUNTIME_ENV:-development}
       - TOKEN_TTL_MINUTES=${TOKEN_TTL_MINUTES:-60}
     ports:
       - "3000:3000"
+    networks:
+      app_net:
+        ipv4_address: 172.28.0.11
     restart: unless-stopped
 
   web:
@@ -30,11 +38,23 @@ services:
         REPO_REF: ${REPO_REF:-main}
         # API base URL for frontend; with nginx proxy, use "/api"
         VITE_API_BASE_URL: ${VITE_API_BASE_URL:-/api}
+        # reCAPTCHA site key for frontend build
+        VITE_RECAPTCHA_SITE_KEY: ${VITE_RECAPTCHA_SITE_KEY}
     ports:
       - "8079:80"
     depends_on:
       - api
+    networks:
+      app_net:
+        ipv4_address: 172.28.0.10
     restart: unless-stopped
+
+networks:
+  app_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
 
 # Usage:
 # 1) Create a .env file next to this compose with:
