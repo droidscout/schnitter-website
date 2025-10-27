@@ -38,7 +38,7 @@ function clientSourceIp(req) {
 }
 
 function isAllowedSource(req) {
-  if(process.env.RUNTIME_ENV === 'development') return true; // allow all in dev
+  if(process.env.NODE_ENV === 'development') return true; // allow all in dev
   const allowed = normalizeIp(process.env.ALLOWED_SOURCE_IP || '');
   const src = clientSourceIp(req);
   if (!allowed) return true; // no restriction configured
