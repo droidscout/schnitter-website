@@ -15,11 +15,7 @@ WORKDIR /app
 RUN test -n "$REPO_URL" || (echo "ERROR: REPO_URL build-arg not provided" && exit 1)
 
 # Shallow clone for speed; checkout ref if specified
-RUN git clone "$REPO_URL" /app \
-  && if [ -n "$REPO_REF" ]; then \
-       git fetch --depth 1 origin "$REPO_REF" || true; \
-       git checkout "$REPO_REF" || true; \
-     fi
+RUN git clone "$REPO_URL" /app
 
 # Install dependencies and build
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
