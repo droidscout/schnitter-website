@@ -10,7 +10,7 @@ ARG VITE_API_BASE_URL
 ARG VITE_RECAPTCHA_SITE_KEY
 
 WORKDIR /app
-
+RUN rm -rf dist
 # Fail clearly if no repo URL provided
 RUN test -n "$REPO_URL" || (echo "ERROR: REPO_URL build-arg not provided" && exit 1)
 
