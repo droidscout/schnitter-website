@@ -12,7 +12,7 @@ export default function ThankYouPage() {
             <h1>Vielen Dank für Ihre Kontaktanfrage!</h1>
             <p>Ihre Anfrage wurde bestätigt und an uns übermittelt.</p>
             <p>
-              <a href="/">Zurück zur Startseite</a>
+              <a href="/schnitter">Zurück zur Startseite</a>
             </p>
           </div>
         </section>

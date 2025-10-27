@@ -7,7 +7,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Config
-const FRONTEND_BASE_URL = process.env.FRONTEND_BASE_URL || 'http://localhost:8080';
+const FRONTEND_BASE_URL = process.env.FRONTEND_BASE_URL || 'http://localhost:8079';
 const THANK_YOU_PAGE_URL = process.env.THANK_YOU_PAGE_URL || '/danke';
 const CONTACT_RECEIVER_EMAIL = process.env.CONTACT_RECEIVER_EMAIL || 'ralph.loser@posteo.de';
 const TOKEN_TTL_MINUTES = parseInt(process.env.TOKEN_TTL_MINUTES || '60', 10);
