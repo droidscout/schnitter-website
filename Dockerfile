@@ -26,7 +26,7 @@ ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 ENV VITE_RECAPTCHA_SITE_KEY=${VITE_RECAPTCHA_SITE_KEY}
 ENV INLINE_RUNTIME_CHUNK=false
 RUN npm install --no-audit --no-fund; 
-RUN npm run build
+RUN npm run build -dev
 
 FROM nginx:alpine AS runner
 
