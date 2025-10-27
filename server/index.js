@@ -89,6 +89,14 @@ async function verifyRecaptcha(token, remoteIp) {
     });
     const data = await resp.json();
     if (!data.success) {
+      console.warn('reCAPTCHA verification failed:', {
+        success: data.success,
+        hostname: data.hostname,
+        'error-codes': data['error-codes'],
+        challenge_ts: data.challenge_ts,
+        action: data.action,
+        score: data.score,
+      });
       return { ok: false, error: 'reCAPTCHA-Überprüfung fehlgeschlagen.' };
     }
     // For v3 we could check score/action if desired
