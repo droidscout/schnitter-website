@@ -10,4 +10,10 @@ export default defineConfig({
   preview: {
     port: 4173,
   },
+  build: {
+    minify: false,          // keine JS/CSS-Minifizierung
+    cssMinify: false,       // keine CSS-Minifizierung
+    assetsInlineLimit: 0,   // keine Base64-Inlines
+    sourcemap: true,        // optional: Source Maps beibehalten
+  },
 });
