@@ -25,7 +25,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
 // Smooth in-page scrolling with sticky-header offset
 window.addEventListener('click', (e) => {
-  const anchor = e.target.closest && e.target.closest('a[href^="#"], a[href^="/#"]');
+  if (!(e.target instanceof Element)) return;
+  const anchor = e.target.closest('a[href^="#"], a[href^="/#"]');
   if (!anchor) return;
 
   const href = anchor.getAttribute('href');
