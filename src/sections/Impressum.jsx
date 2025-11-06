@@ -15,6 +15,9 @@ export function Impressum() {
           E‑Mail: <a href="mailto:haustechnik@schnittergbr.de">haustechnik@schnittergbr.de</a>
         </p>
         <p>
+          USt-ID gemäß §27a Umsatzsteuergesetz: DE202415027
+        </p>
+        <p>
           <strong>Leistungsbeschreibung</strong><br />
           Elektroinstallation, Regelungstechnik, Schaltschrankbau, Heizungen, Öl- und Gasfeuerung, Kunden- und Stördienst,
           Werksvertretung, Spezial-Heizkessel, Solaranlagen, gesamte Haustechnik.
