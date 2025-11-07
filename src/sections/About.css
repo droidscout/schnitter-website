@@ -1,5 +1,11 @@
 .about {
   padding: var(--section-spacing) 0;
+  /* Distinct background for visual separation */
+  background: #f7f9fc;
+  /* Fill viewport minus sticky header so no other section shows */
+  min-height: calc(100vh - 110px);
+  display: flex;
+  align-items: center;
 }
 
 .about__inner {
@@ -95,8 +101,15 @@
 .about__cta {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1.5rem;
   flex-wrap: wrap;
+}
+
+/* Centered CTA; keep original size, make a bit wider */
+.about__cta-button {
+  padding-left: 2.8rem;
+  padding-right: 2.8rem;
 }
 
 .about__phone {
@@ -109,5 +122,11 @@
   .about__overlay {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+@media (max-width: 540px) {
+  .about {
+    min-height: calc(100vh - 80px);
   }
 }

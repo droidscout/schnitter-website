@@ -78,11 +78,8 @@ export function Contact() {
       <div className="container contact__inner">
         <div className="contact__content">
           <span className="contact__eyebrow">Kontakt</span>
-          <h2>Ihre Anfrage – wir melden uns innerhalb von 24 Stunden</h2>
-          <p>
-            Erzählen Sie uns von Ihrem Projekt. Ob Badmodernisierung, Heizungssanierung oder komplexe Lüftungskonzepte –
-            wir beraten Sie persönlich und transparent.
-          </p>
+          <h2>Ihre Anfrage</h2>
+          <h3>Wir melden uns zeitnah.</h3>
           <div className="contact__options">
             <div>
               <h3>Telefon</h3>
@@ -90,36 +87,36 @@ export function Contact() {
             </div>
             <div>
               <h3>Email</h3>
-              <a href="mailto:haustechnik@schnittergbr.de">haustechnik@schnittergbr.de</a>
+              <a href="mailto:haustechnik@schnittergbr.de">Haustechnik@SchnitterGbR.de</a>
             </div>
             <div>
-            <h3>Adresse</h3>
-            <p>Bahnweg 51, 85774 Unterföhring</p>
+              <h3>Adresse</h3>
+              <p className="contact__address">Bahnweg 51, 85774 Unterföhring</p>
             </div>
           </div>
         </div>
         <form className="contact__form" onSubmit={handleSubmit}>
           <div className="contact__group">
-            <label htmlFor="name">Name</label>
-            <input id="name" name="name" type="text" placeholder="Max Mustermann" required />
+            <label htmlFor="name">Vor- und Nachname</label>
+            <input id="name" name="name" type="text" required />
           </div>
           <div className="contact__group">
             <label htmlFor="email">E-Mail</label>
-            <input id="email" name="email" type="email" placeholder="sie@unternehmen.de" required />
+            <input id="email" name="email" type="email" required />
           </div>
           <div className="contact__group">
-            <label htmlFor="phone">Telefon</label>
-            <input id="phone" name="phone" type="tel" placeholder="+49 ..." />
+            <label htmlFor="phone">Telefonnummer</label>
+            <input id="phone" name="phone" type="tel"/>
           </div>
           <div className="contact__group">
             <label htmlFor="message">Ihre Nachricht</label>
-            <textarea id="message" name="message" rows="4" placeholder="Teile Sie uns etwas mit." />
+            <textarea id="message" name="message" rows="4" placeholder="Teilen Sie uns Ihr Anliegen mit." />
           </div>
           <button type="submit" className="accent-button contact__submit">
             Anfrage senden
           </button>
           <p className="contact__privacy">
-            Mit dem Absenden stimmen Sie einer Kontaktaufnahme per E-Mail oder Telefon zu. Ihre Daten werden vertraulich
+            Mit dem Absenden stimmen Sie einer Kontaktaufnahme per<br />E-Mail oder Telefon zu. Ihre Daten werden vertraulich
             behandelt.
           </p>
         </form>

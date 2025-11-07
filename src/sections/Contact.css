@@ -1,5 +1,11 @@
 .contact {
   padding: var(--section-spacing) 0;
+  /* Distinct background for visual separation */
+  background: #eff3f8;
+  /* Fill viewport minus sticky header so no other section shows */
+  min-height: calc(100vh - 110px);
+  display: flex;
+  align-items: center;
 }
 
 .contact__inner {
@@ -42,7 +48,8 @@
   color: var(--primary);
 }
 
-.contact__options a {
+.contact__options a,
+.contact__options .contact__address {
   color: var(--text);
   font-weight: 600;
 }
@@ -89,4 +96,10 @@
 .contact__privacy {
   font-size: 0.85rem;
   color: var(--text-light);
+}
+
+@media (max-width: 540px) {
+  .contact {
+    min-height: calc(100vh - 80px);
+  }
 }

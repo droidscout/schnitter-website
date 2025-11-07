@@ -16,9 +16,8 @@ export function About() {
           <span className="about__eyebrow">Über uns</span>
           <h2>Technik, die begeistert und Bestand hat</h2>
           <p>
-            Schnitter GbR Haustechnik steht für zuverlässige Projektabwicklung, saubere Ausführung und nachhaltige Anlagen.
-            Unser Team aus Meister:innen, Techniker:innen und Monteur:innen setzt auf hochwertige Markenprodukte und
-            transparente Kommunikation.
+            Schnitter GbR Haustechnik steht für zuverlässige Projektabwicklung, saubere Ausführung und nachhaltige Anlagen - schnell, effizient und lösungsorientiert.
+            Unsere Firma setzt auf qualitativ hochwertige Markenprodukte und transparente Kommunikation.
           </p>
           <ul className="about__highlights">
             {highlights.map((item) => (
@@ -29,11 +28,8 @@ export function About() {
             ))}
           </ul>
           <div className="about__cta">
-            <a className="accent-button" href="#contact">
-              Beratung anfordern
-            </a>
-            <a className="about__phone" href="tel:+498936109524">
-              089 361 095 24
+            <a className="accent-button about__cta-button" href="#contact">
+              Kontakt
             </a>
           </div>
         </div>
