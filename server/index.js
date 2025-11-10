@@ -9,8 +9,10 @@ const PORT = process.env.PORT || 3000;
 // Config
 const FRONTEND_BASE_URL = process.env.FRONTEND_BASE_URL || 'http://localhost:8079';
 const THANK_YOU_PAGE_URL = process.env.THANK_YOU_PAGE_URL || '/danke';
-const CONTACT_RECEIVER_EMAIL = process.env.CONTACT_RECEIVER_EMAIL || 'ralph.loser@posteo.de';
+const CONTACT_RECEIVER_EMAIL = process.env.CONTACT_RECEIVER_EMAIL || 'haustechnik@schnittergbr.de';
 const TOKEN_TTL_MINUTES = parseInt(process.env.TOKEN_TTL_MINUTES || '60', 10);
+// Use authenticated SMTP user (or fallback) as allowed sender for MAIL FROM
+const ALLOWED_SENDER_EMAIL = process.env.SMTP_USER || CONTACT_RECEIVER_EMAIL;
 
 // CORS: allow frontend origin + handle preflight
 const corsOptions = { origin: new URL(FRONTEND_BASE_URL).origin, credentials: false };
@@ -187,8 +189,12 @@ app.post('/api/contact', async (req, res) => {
   // Note: confirm is served by this API; but user will hit it via NGINX proxy at same host
 
   const mail = {
-    from: CONTACT_RECEIVER_EMAIL,
+    from: ALLOWED_SENDER_EMAIL,
     to: email,
+    // Replies should go to the contact address
+    replyTo: CONTACT_RECEIVER_EMAIL,
+    // Ensure SMTP envelope MAIL FROM matches allowed sender
+    envelope: { from: ALLOWED_SENDER_EMAIL, to: email },
     subject: 'Bitte bestätigen Sie Ihre Anfrage (Double-Opt-In)',
     text: `Hallo ${name},\n\nbitte bestätigen Sie Ihre Anfrage, indem Sie auf folgenden Link klicken:\n${FRONTEND_BASE_URL.replace(/\/+$/, '')}/api/confirm?token=${token}\n\nVielen Dank!`,
     html: `<p>Hallo ${name},</p><p>bitte bestätigen Sie Ihre Anfrage, indem Sie auf folgenden Link klicken:</p><p><a href="${FRONTEND_BASE_URL.replace(/\/+$/, '')}/api/confirm?token=${token}">Anfrage bestätigen</a></p><p>Vielen Dank!</p>`
@@ -219,8 +225,12 @@ app.get('/api/confirm', async (req, res) => {
   // Forward the enquiry to receiver
   try {
     await transporter.sendMail({
-      from: record.email,
+      from: ALLOWED_SENDER_EMAIL,
       to: CONTACT_RECEIVER_EMAIL,
+      // Route replies back to the original submitter
+      replyTo: record.email,
+      // Enforce envelope MAIL FROM to be the authenticated/allowed sender
+      envelope: { from: ALLOWED_SENDER_EMAIL, to: CONTACT_RECEIVER_EMAIL },
       subject: `Neue Kontaktanfrage von ${record.name}`,
       text: `Name: ${record.name}\nE-Mail: ${record.email}\nTelefon: ${record.phone || '-'}\n\nNachricht:\n${record.message || ''}`,
     });
