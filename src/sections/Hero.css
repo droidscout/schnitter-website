@@ -2,8 +2,7 @@
   position: relative;
   padding: calc(var(--section-spacing) + 3rem) 0 var(--section-spacing);
   background: linear-gradient(135deg, rgba(9, 24, 43, 0.94) 0%, rgba(6, 14, 24, 0.9) 55%),
-    url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1600&q=80')
-      center/cover no-repeat;
+    url('/schnitter/images/169664984_l.webp') center/cover no-repeat;
   color: #fff;
   /* Fill visible window below sticky header */
   min-height: calc(100vh - 110px);
@@ -33,7 +32,22 @@
 }
 
 .hero__chip {
-  align-self: flex-start;
+  align-self: stretch;
+  display: flex;
+  justify-content: space-between;
+  gap: 0;
+  width: 100%;
+  max-width: 720px;
+}
+
+.hero__chip-sep {
+  opacity: 0.85;
+}
+
+@media (max-width: 640px) {
+  .hero__chip {
+    max-width: none;
+  }
 }
 
 .hero h1 {

@@ -5,7 +5,25 @@ export function Hero() {
     <section id="hero" className="hero">
       <div className="container hero__inner">
         <div className="hero__content">
-          <span className="chip hero__chip">Heizung · Sanitär · Klima · Lüftung · Elektro</span>
+          <span className="chip hero__chip">
+            {(() => {
+              const words = ['Heizung', 'Sanitär', 'Klima', 'Lüftung', 'Elektro'];
+              const tokens = [];
+              words.forEach((w, i) => {
+                tokens.push({ t: w, sep: false });
+                if (i < words.length - 1) tokens.push({ t: '·', sep: true });
+              });
+              return tokens.map((tok, idx) => (
+                <span
+                  key={idx}
+                  className={tok.sep ? 'hero__chip-sep' : 'hero__chip-item'}
+                  aria-hidden={tok.sep ? 'true' : undefined}
+                >
+                  {tok.t}
+                </span>
+              ));
+            })()}
+          </span>
           <h1>
             Schnitter GbR</h1><h2>Ihr Meisterbetrieb im Bereich Haustechnik aus München<br /> - zuverlässig & kompetent.
           </h2>
