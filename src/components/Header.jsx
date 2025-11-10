@@ -11,7 +11,7 @@ export function Header() {
     <header className="header">
       <div className="container header__inner">
         <a className="header__logo" href="/schnitter" aria-label="Schnitter GbR Haustechnik">
-          <img className="header__logo-img" src="images/Schnitter-GBR.png" alt="Schnitter GbR Haustechnik Logo" />
+          <img className="header__logo-img" src="images/Schnitter-GBR-Logo.png" alt="Schnitter GbR Haustechnik Logo" />
         </a>
         <nav className="header__nav">
           {navigation.map((item) => (

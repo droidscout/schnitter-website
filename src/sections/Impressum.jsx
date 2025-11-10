@@ -12,7 +12,7 @@ export function Impressum() {
           Telefon: <a href="tel:+498936109524">089 361 095 24</a>
         </p>
         <p>
-          E‑Mail: <a href="mailto:haustechnik@schnittergbr.de">haustechnik@schnittergbr.de</a>
+          E‑Mail: <a href="mailto:haustechnik@schnittergbr.de">Haustechnik@SchnitterGbR.de</a>
         </p>
         <p>
           USt-ID gemäß §27a Umsatzsteuergesetz: DE202415027
