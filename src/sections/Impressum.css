@@ -24,3 +24,9 @@
   color: rgba(255, 255, 255, 0.76);
   font-weight: 600;
 }
+
+.impressum__credit {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.76);
+}

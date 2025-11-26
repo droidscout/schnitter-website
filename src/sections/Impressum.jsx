@@ -32,7 +32,12 @@ export function Impressum() {
           <strong>Weitere Informationen</strong><br />
           Ausbildungsbetrieb ja
         </p>
+        <br />
+        <p>
+          <strong>Webdesign by</strong><br />
+          <a href="https://www.rlox.de">RLOX - optimized business eXperience</a>
+        </p>
       </div>
     </section>
-  );
-}
+    );
+  }
