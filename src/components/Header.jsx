@@ -77,7 +77,7 @@ export function Header() {
           <a className="header__logo" href="/schnitter" aria-label="Schnitter GbR Haustechnik">
             <img
               className="header__logo-img"
-              src="images/Schnitter-GBR-Logo.png"
+              src="images/Schnitter-GBR-Logo-1.png"
               alt="Schnitter GbR Haustechnik Logo"
             />
           </a>

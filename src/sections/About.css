@@ -1,7 +1,7 @@
 .about {
   padding: var(--section-spacing) 0;
   /* Distinct background for visual separation */
-  background: #f7f9fc;
+  background: #000000;
   /* Fill viewport minus sticky header so no other section shows */
   min-height: calc(100vh - 110px);
   display: flex;
@@ -27,7 +27,7 @@
 .about__image {
   position: absolute;
   inset: 0;
-  background: url('/schnitter/images/169664984_l.webp') center/cover no-repeat;
+  background: url('/schnitter/images/Haustechnik.webp') center/cover no-repeat;
   filter: saturate(0.9);
 }
 
@@ -89,7 +89,7 @@
 }
 
 .about__highlights li {
-  background: #fff;
+  background: rgba(149, 30, 36, 0.2);
   padding: 1.6rem;
   border-radius: var(--radius);
   box-shadow: 0 16px 40px rgba(11, 24, 37, 0.16);
@@ -97,11 +97,17 @@
   gap: 0.4rem;
 }
 
-.about__highlights span {
+.about__highlights h3 {
   font-size: 2rem;
   font-weight: 700;
   color: var(--primary);
   line-height: 1;
+  margin: 0;
+}
+
+.about__highlights p {
+  color: rgba(255, 255, 255, 0.76);
+  margin: 0;
 }
 
 .about__cta {

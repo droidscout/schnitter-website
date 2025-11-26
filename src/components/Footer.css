@@ -1,6 +1,6 @@
 .footer {
-  margin-top: var(--section-spacing);
-  background: #081523;
+  /*margin-top: var(--section-spacing);*/
+  background: #000;
   color: rgba(255, 255, 255, 0.82);
 }
 
@@ -39,7 +39,7 @@
 }
 
 .footer__bottom {
-  background: #050d18;
+  background: #000;
 }
 
 .footer__bottom-inner {

@@ -3,7 +3,7 @@
 }
 
 .datenschutz__inner {
-  background: #fff;
+  background: rgba(149, 30, 36, 0.2);
   border-radius: calc(var(--radius) + 8px);
   box-shadow: 0 30px 70px rgba(6, 16, 30, 0.18);
   padding: clamp(2rem, 5vw, 3rem);
@@ -13,29 +13,33 @@
 
 .datenschutz h1 {
   font-size: clamp(1.8rem, 3.5vw, 2.2rem);
+  color: rgba(255, 255, 255, 0.76);
 }
 
 .datenschutz h2 {
   margin-top: 0.75rem;
   font-size: clamp(1.4rem, 3vw, 1.8rem);
+  color: rgba(255, 255, 255, 0.76);
 }
 
 .datenschutz h3 {
   margin-top: 0.5rem;
   font-size: clamp(1.1rem, 2.4vw, 1.3rem);
+  color: rgba(255, 255, 255, 0.76);
 }
 
 .datenschutz h4 {
   margin-top: 0.5rem;
+  color: rgba(255, 255, 255, 0.76);
 }
 
 .datenschutz p,
-.datenschutz ul {
-  color: var(--text);
+.datenschutz ul,
+.datenschutz ul li {
+  color: rgba(255, 255, 255, 0.76);
 }
 
 .datenschutz a {
-  color: var(--primary);
+  color: rgba(255, 255, 255, 0.76);
   font-weight: 600;
 }
-

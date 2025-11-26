@@ -22,8 +22,8 @@ export function About() {
           <ul className="about__highlights">
             {highlights.map((item) => (
               <li key={item.label}>
-                <span>{item.value}</span>
-                {item.label}
+                <h3>{item.value}</h3>
+                <p>{item.label}</p>
               </li>
             ))}
           </ul>

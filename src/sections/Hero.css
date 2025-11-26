@@ -1,8 +1,8 @@
 .hero {
   position: relative;
   padding: calc(var(--section-spacing) + 3rem) 0 var(--section-spacing);
-  background: linear-gradient(135deg, rgba(9, 24, 43, 0.94) 0%, rgba(6, 14, 24, 0.9) 55%),
-    url('/schnitter/images/169664984_l.webp') center/cover no-repeat;
+  background: linear-gradient(135deg, rgba(9, 24, 43, 0.94) 0%, rgba(12, 13, 13, 0.9) 25%),
+    url('/schnitter/images/Grundriss.webp') center/cover no-repeat;
   color: #fff;
   /* Fill visible window below sticky header */
   min-height: calc(100vh - 110px);
@@ -29,15 +29,30 @@
 .hero__content {
   display: grid;
   gap: 1.5rem;
+  /*place-items: center;*/
 }
 
-.hero__chip {
-  align-self: stretch;
-  display: flex;
-  justify-content: space-between;
-  gap: 0;
-  width: 100%;
-  max-width: 720px;
+@media(max-width: 1024px) {
+  .hero__chip {
+    align-self: stretch;
+    display: flex;
+    justify-content: space-between;
+    gap: 0;
+    width: 100%;
+    max-width: 720px;
+  }
+}
+
+
+@media(min-width: 1025px) {
+  .hero__chip {
+    align-self: stretch;
+    display: flex;
+    justify-content: space-between;
+    gap: 0;
+    width: 72%;
+    max-width: 720px;
+  }
 }
 
 .hero__chip-sep {
@@ -86,7 +101,7 @@
 }
 
 .hero__card {
-  background: rgba(7, 19, 32, 0.85);
+  background: #000;
   border-radius: var(--radius);
   padding: 2rem;
   backdrop-filter: blur(12px);
@@ -99,7 +114,7 @@
   display: inline-flex;
   flex-direction: column;
   gap: 0.3rem;
-  align-items: flex-start;
+  align-items: center;
   padding: 1rem 1.4rem;
   border-radius: 14px;
   background: rgba(149, 30, 36, 0.2);

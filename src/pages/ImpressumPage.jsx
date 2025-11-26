@@ -5,13 +5,12 @@ import '../index.css';
 
 export default function ImpressumPage() {
   return (
-    <>
+    <div className="legal-page">
       <Header />
       <main>
         <Impressum />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
-

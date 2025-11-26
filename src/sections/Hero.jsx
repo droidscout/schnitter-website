@@ -25,10 +25,10 @@ export function Hero() {
             })()}
           </span>
           <h1>
-            Schnitter GbR</h1><h2>Ihr Meisterbetrieb im Bereich Haustechnik aus München<br /> - zuverlässig & kompetent.
+            Schnitter GbR</h1><h2>Ihr Meisterbetrieb im Bereich Haustechnik aus München, zuverlässig und kompetent.
           </h2>
           <p>
-            Wir begleiten Eigentümer, Architekturbüros, Hausverwaltungen und Gewerbe bei der Planung, Umsetzung und Wartung im Bereich der gesamten Haustechnik. Persönlich, termintreu und mit Blick auf Energieeffizienz.
+            Wir begleiten Eigentümer, Architekturbüros, Hausverwaltungen und Gewerbe bei der Instandhaltung, Planung, Umsetzung und Wartung im Bereich der gesamten Haustechnik. Persönlich, termintreu und mit Blick auf Energieeffizienz.
           </p>
           <div className="hero__actions">
             <a className="accent-button" href="#contact">
@@ -42,7 +42,7 @@ export function Hero() {
         <div className="hero__card">
           <div className="hero__badge">
             <h3>24/7 Service & Notfall</h3>
-            <p>Notdienst für Vertragspartner</p>
+            <p>Notdienst nur für Vertragspartner</p>
           </div>
 {/*           <div className="hero__stat">
             <h3>24/7 Service</h3>

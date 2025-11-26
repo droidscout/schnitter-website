@@ -3,7 +3,7 @@
 }
 
 .impressum__inner {
-  background: #fff;
+  background: rgba(149, 30, 36, 0.2);
   border-radius: calc(var(--radius) + 8px);
   box-shadow: 0 30px 70px rgba(6, 16, 30, 0.18);
   padding: clamp(2rem, 5vw, 3rem);
@@ -13,10 +13,14 @@
 
 .impressum h2 {
   font-size: clamp(1.6rem, 3vw, 2rem);
+  color: rgba(255, 255, 255, 0.76);
 }
 
-.impressum p a {
-  color: var(--primary);
+.impressum p {
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.impressum a {
+  color: rgba(255, 255, 255, 0.76);
   font-weight: 600;
 }
-

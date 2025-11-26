@@ -5,13 +5,12 @@ import '../index.css';
 
 export default function DatenschutzPage() {
   return (
-    <>
+    <div className="legal-page">
       <Header />
       <main>
         <Datenschutz />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
-

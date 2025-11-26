@@ -1,7 +1,7 @@
 .contact {
   padding: var(--section-spacing) 0;
   /* Distinct background for visual separation */
-  background: #eff3f8;
+  background: #000000;
   /* Fill viewport minus sticky header so no other section shows */
   min-height: calc(100vh - 110px);
   display: flex;
@@ -9,7 +9,7 @@
 }
 
 .contact__inner {
-  background: #fff;
+  background: rgba(149, 30, 36, 0.2);
   border-radius: calc(var(--radius) + 8px);
   box-shadow: 0 30px 70px rgba(6, 16, 30, 0.18);
   padding: clamp(2rem, 5vw, 4rem);
@@ -18,11 +18,21 @@
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
+.contact__inner h2,
+.contact__inner h3,
+.contact__inner span {
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.contact__inner a,
+.contact__inner p {
+  color: rgba(255, 255, 255, 0.76);
+}
+
 .contact__eyebrow {
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-weight: 600;
-  color: var(--accent);
 }
 
 .contact__content {
@@ -45,12 +55,10 @@
   font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--primary);
 }
 
 .contact__options a,
 .contact__options .contact__address {
-  color: var(--text);
   font-weight: 600;
 }
 
@@ -67,7 +75,7 @@
 .contact__group label {
   font-weight: 600;
   font-size: 0.95rem;
-  color: var(--primary);
+  color: rgba(255, 255, 255, 0.76);
 }
 
 .contact__group input,
@@ -95,7 +103,7 @@
 
 .contact__privacy {
   font-size: 0.85rem;
-  color: var(--text-light);
+  color: rgba(255, 255, 255, 0.76);
 }
 
 @media (max-width: 540px) {
