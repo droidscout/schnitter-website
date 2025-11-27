@@ -1,10 +1,11 @@
 import { Header } from '../components/Header.jsx';
 import { Footer } from '../components/Footer.jsx';
 import '../index.css';
+import '../sections/Datenschutz.css';
 
 export default function ThankYouPage() {
   return (
-    <>
+    <div className="legal-page">
       <Header />
       <main>
         <section className="datenschutz">
@@ -18,7 +19,6 @@ export default function ThankYouPage() {
         </section>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
-
