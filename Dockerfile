@@ -30,9 +30,8 @@ FROM nginx:alpine AS runner
 COPY infra/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy .env file
-COPY .env /usr/share/nginx/html/schnitter/.env
+COPY .env /usr/share/nginx/html/.env
 # Static assets built by Vite
-COPY --from=builder /app/dist /usr/share/nginx/html/schnitter
-
+COPY --from=builder /app/dist /usr/share/nginx/html/
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
