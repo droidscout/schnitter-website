@@ -2,7 +2,7 @@
   position: relative;
   padding: calc(var(--section-spacing) + 3rem) 0 var(--section-spacing);
   background: linear-gradient(135deg, rgba(9, 24, 43, 0.94) 0%, rgba(12, 13, 13, 0.9) 25%),
-    url('/schnitter/images/Grundriss.webp') center/cover no-repeat;
+    url('/images/Grundriss.webp') center/cover no-repeat;
   color: #fff;
   /* Fill visible window below sticky header */
   min-height: calc(100vh - 110px);

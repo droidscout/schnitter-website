@@ -8,10 +8,10 @@ import './index.css';
 
 let path = window.location.pathname.replace(/\/+$/, '');
 // Support deployment under sub-path like /schnitter
-if (path.startsWith('/schnitter')) {
+/* if (path.startsWith('/')) {
   path = path.slice('/schnitter'.length) || '/';
   console.log("Path: ", path);
-}
+} */
 const isImpressum = path === '/impressum';
 const isDatenschutz = path === '/datenschutz';
 const isDanke = path === '/danke';

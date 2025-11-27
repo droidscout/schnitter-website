@@ -2,7 +2,7 @@ import './Hero.css';
 
 export function Hero() {
   return (
-    <section id="hero" className="hero">
+    <section id="start" className="hero">
       <div className="container hero__inner">
         <div className="hero__content">
           <span className="chip hero__chip">

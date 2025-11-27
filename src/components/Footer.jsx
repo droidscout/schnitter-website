@@ -25,8 +25,8 @@ export function Footer() {
         <div className="container footer__bottom-inner">
           <span>© {new Date().getFullYear()} Schnitter GbR</span>
           <div className="footer__links">
-            <a href="/schnitter/impressum">Impressum</a>
-            <a href="/schnitter/datenschutz">Datenschutz</a>
+            <a href="/impressum">Impressum</a>
+            <a href="/datenschutz">Datenschutz</a>
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import './Header.css';
 
 const navigation = [
-  { label: 'Start', href: '#hero' },
+  { label: 'Start', href: '#start' },
   { label: 'Über uns', href: '#about' },
   { label: 'Kontakt', href: '#contact' },
 ];
@@ -74,7 +74,7 @@ export function Header() {
     <>
       <header className="header">
         <div className="container header__inner">
-          <a className="header__logo" href="/schnitter" aria-label="Schnitter GbR Haustechnik">
+          <a className="header__logo" href="/" aria-label="Schnitter GbR Haustechnik">
             <img
               className="header__logo-img"
               src="images/Schnitter-GBR-Logo-1.png"
@@ -85,7 +85,7 @@ export function Header() {
           {/* Desktop nav (hidden on mobile) */}
           <nav className="header__nav" aria-label="Hauptnavigation" role="navigation">
             {navigation.map((item) => (
-              <a key={item.label} href={`/schnitter/${item.href}`} className="header__link">
+              <a key={item.label} href={`/${item.href}`} className="header__link">
                 {item.label}
               </a>
             ))}
@@ -123,7 +123,7 @@ export function Header() {
         <ul className="nav-list">
           {navigation.map((item) => (
             <li key={item.label}>
-              <a className="nav-link" href={`/schnitter/${item.href}`}>{item.label}</a>
+              <a className="nav-link" href={`/${item.href}`}>{item.label}</a>
             </li>
           ))}
         </ul>

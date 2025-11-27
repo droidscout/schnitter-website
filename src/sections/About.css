@@ -27,7 +27,7 @@
 .about__image {
   position: absolute;
   inset: 0;
-  background: url('/schnitter/images/Haustechnik.webp') center/cover no-repeat;
+  background: url('/images/Haustechnik.webp') center/cover no-repeat;
   filter: saturate(0.9);
 }
 
