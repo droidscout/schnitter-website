@@ -167,6 +167,7 @@ function makeTransporter() {
 const transporter = makeTransporter();
 
 app.post('/api/contact', async (req, res) => {
+  console.log('Received contact submission from', trueClientIp(req));
   // Enforce source IP restriction
   if (!isAllowedSource(req)) {
     return res.status(403).json({ ok: false, error: 'Zugriff verweigert.' });
