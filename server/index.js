@@ -149,13 +149,21 @@ function applyRateLimit(req, res) {
 }
 
 async function verifyRecaptcha(token, remoteIp) {
+  console.log('verifyRecaptcha called with token:', !!token, 'remoteIp:', remoteIp);
   const secret = process.env.RECAPTCHA_SECRET_KEY;
-  if (!secret) return { ok: true }; // allow if not configured
-  if (!token) return { ok: false, error: 'reCAPTCHA erforderlich.' };
+  console.log('RECAPTCHA_SECRET_KEY present:', !!secret);
+  if (!secret) {
+     console.log('No RECAPTCHA secret set – allowing request without verification.');
+     return { ok: true }; // allow if not configured
+  }
+  if (!token) {
+    console.warn('No reCAPTCHA token provided.');
+    return { ok: false, error: 'reCAPTCHA erforderlich.' };
+  }
   try {
     const params = new URLSearchParams({ secret, response: token });
     if (remoteIp) params.set('remoteip', remoteIp);
-    console.log('Verifying reCAPTCHA for IP', remoteIp);
+    console.log('Sending reCAPTCHA verify request to Google…');
     const resp = await fetch('https://www.google.com/recaptcha/api/siteverify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
