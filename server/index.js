@@ -155,6 +155,7 @@ async function verifyRecaptcha(token, remoteIp) {
   try {
     const params = new URLSearchParams({ secret, response: token });
     if (remoteIp) params.set('remoteip', remoteIp);
+    console.log('Verifying reCAPTCHA for IP', remoteIp);
     const resp = await fetch('https://www.google.com/recaptcha/api/siteverify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
