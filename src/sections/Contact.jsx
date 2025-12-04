@@ -30,6 +30,9 @@ export function Contact() {
         });
       }
     };
+    script.onerror = (err) => {
+      console.error('reCAPTCHA script failed to load – promise will not resolve:', err);
+    };
 
     return () => {
       // keep script for page lifetime
