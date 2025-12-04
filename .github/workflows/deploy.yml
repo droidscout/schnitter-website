@@ -1,0 +1,65 @@
+name: Deploy to Docker Swarm
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_PORT: ${{ secrets.SSH_PORT }}
+      SSH_USER: ${{ secrets.SSH_USER }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      REMOTE_PROJECT_PATH: ${{ secrets.REMOTE_PROJECT_PATH }}
+      STACK_NAME: ${{ secrets.STACK_NAME }}
+      REMOTE_COMPOSE_FILE: ${{ secrets.REMOTE_COMPOSE_FILE }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ env.SSH_PRIVATE_KEY }}
+
+      - name: Trust remote host key
+        run: |
+          mkdir -p ~/.ssh
+          PORT=${SSH_PORT:-22}
+          ssh-keyscan -p "$PORT" "$SSH_HOST" >> ~/.ssh/known_hosts
+
+      - name: Deploy stack
+        shell: bash
+        run: |
+          PORT=${SSH_PORT:-22}
+          COMPOSE_FILE_PATH=${REMOTE_COMPOSE_FILE:-docker-compose.yml}
+          ssh -p "$PORT" "$SSH_USER@$SSH_HOST" <<EOF
+          set -euo pipefail
+          cd "$REMOTE_PROJECT_PATH"
+
+          echo "Fetching latest master..."
+          git fetch origin master
+          git reset --hard origin/master
+
+          echo "Removing existing stack (if any)..."
+          if docker stack ls --format '{{.Name}}' | grep -Fxq "$STACK_NAME"; then
+            docker stack rm "$STACK_NAME"
+            # Wait until the stack is fully removed
+            while docker stack ls --format '{{.Name}}' | grep -Fxq "$STACK_NAME"; do
+              echo "Waiting for stack removal..."
+              sleep 5
+            done
+          fi
+
+          echo "Stopping any leftover compose services..."
+          docker compose -f "$COMPOSE_FILE_PATH" down --remove-orphans || true
+
+          echo "Building fresh images..."
+          docker compose -f "$COMPOSE_FILE_PATH" build --pull
+
+          echo "Deploying stack..."
+          docker stack deploy --prune -c "$COMPOSE_FILE_PATH" "$STACK_NAME"
+          EOF
