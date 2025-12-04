@@ -39,12 +39,83 @@ function clientSourceIp(req) {
   return normalizeIp(req.socket?.remoteAddress || req.ip || '');
 }
 
+function ipToInt(ip) {
+  const octets = ip.split('.');
+  if (octets.length !== 4) return null;
+  const bytes = octets.map((part) => Number(part));
+  if (bytes.some((byte) => Number.isNaN(byte) || byte < 0 || byte > 255)) return null;
+  return bytes.reduce((acc, byte) => acc * 256 + byte, 0);
+}
+
+function parseCidrRange(entry) {
+  const [ipPart, prefixPart] = entry.split('/');
+  if (!ipPart || !prefixPart) return null;
+  const prefix = Number(prefixPart);
+  if (!Number.isInteger(prefix) || prefix < 0 || prefix > 32) return null;
+  const baseIp = normalizeIp(ipPart.trim());
+  const baseInt = ipToInt(baseIp);
+  if (baseInt === null) return null;
+  const blockSize = 2 ** (32 - prefix);
+  const start = Math.floor(baseInt / blockSize) * blockSize;
+  const end = start + blockSize - 1;
+  return { type: 'range', start, end };
+}
+
+function parseDashRange(entry) {
+  const [startRaw, endRaw] = entry.split('-');
+  if (!startRaw || !endRaw) return null;
+  const startInt = ipToInt(normalizeIp(startRaw.trim()));
+  const endInt = ipToInt(normalizeIp(endRaw.trim()));
+  if (startInt === null || endInt === null) return null;
+  return {
+    type: 'range',
+    start: Math.min(startInt, endInt),
+    end: Math.max(startInt, endInt),
+  };
+}
+
+function parseAllowedSourceRules(value) {
+  if (!value) return [];
+  const entries = value.split(/[,;\n]+/).map((entry) => entry.trim()).filter(Boolean);
+  const rules = [];
+  for (const entry of entries) {
+    let rule = null;
+    if (entry.includes('/')) {
+      rule = parseCidrRange(entry);
+    } else if (entry.includes('-')) {
+      rule = parseDashRange(entry);
+    } else {
+      const literal = normalizeIp(entry);
+      const ipInt = ipToInt(literal);
+      rule = ipInt === null ? { type: 'literal', value: literal } : { type: 'range', start: ipInt, end: ipInt };
+    }
+    if (rule) {
+      rules.push(rule);
+    } else {
+      console.warn(`Ignoring invalid ALLOWED_SOURCE_IP entry: "${entry}"`);
+    }
+  }
+  return rules;
+}
+
+function matchAllowedSource(ip, rules) {
+  const normalized = normalizeIp(ip);
+  const ipv4Int = ipToInt(normalized);
+  return rules.some((rule) => {
+    if (rule.type === 'range') {
+      return ipv4Int !== null && ipv4Int >= rule.start && ipv4Int <= rule.end;
+    }
+    return normalized === rule.value;
+  });
+}
+
+const allowedSourceRules = parseAllowedSourceRules(process.env.ALLOWED_SOURCE_IP || '');
+
 function isAllowedSource(req) {
   if(process.env.NODE_ENV === 'development') return true; // allow all in dev
-  const allowed = normalizeIp(process.env.ALLOWED_SOURCE_IP || '');
   const src = clientSourceIp(req);
-  if (!allowed) return true; // no restriction configured
-  if (src === allowed) return true;
+  if (!allowedSourceRules.length) return true; // no restriction configured
+  if (matchAllowedSource(src, allowedSourceRules)) return true;
   // allow localhost in non-production for local dev/testing
   if (process.env.NODE_ENV !== 'production' && (src === '127.0.0.1' || src === '::1')) return true;
   return false;
