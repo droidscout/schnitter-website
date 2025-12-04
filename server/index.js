@@ -170,6 +170,7 @@ async function verifyRecaptcha(token, remoteIp) {
       body: params,
     });
     const data = await resp.json();
+    console.log('reCAPTCHA verify response:', data);
     if (!data.success) {
       console.warn('reCAPTCHA verification failed:', {
         success: data.success,
@@ -302,7 +303,6 @@ app.get('/api/confirm', async (req, res) => {
     tokens.delete(token);
     return res.status(400).send('Token abgelaufen.');
   }
-
   // Forward the enquiry to receiver
   try {
     await transporter.sendMail({

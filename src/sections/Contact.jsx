@@ -42,7 +42,7 @@ export function Contact() {
     if (recaptchaReadyRef.current) await recaptchaReadyRef.current;
     if (!(window.grecaptcha && window.grecaptcha.execute)) return null;
     try {
-      const token = await window.grecaptcha.execute(siteKey, { action: 'contact' });
+      const token = await window.grecaptcha.execute(siteKey, { action: 'login' });
       return token;
     } catch (_) {
       return null;
