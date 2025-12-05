@@ -16,9 +16,15 @@ export function Contact() {
     script.defer = true;
     document.head.appendChild(script);
 
-    recaptchaReadyRef.current = new Promise((resolve) => {
+    recaptchaReadyRef.current = new Promise((resolve, reject) => {
+      const timeoutId = window.setTimeout(() => {
+        reject(new Error('reCAPTCHA script did not become ready before timeout.'));
+      }, 10_000);
       window.grecaptchaReadyCallbacks = window.grecaptchaReadyCallbacks || [];
-      window.grecaptchaReadyCallbacks.push(resolve);
+      window.grecaptchaReadyCallbacks.push(() => {
+        window.clearTimeout(timeoutId);
+        resolve();
+      });
     });
 
     script.onload = () => {
@@ -29,9 +35,6 @@ export function Contact() {
           window.grecaptchaReadyCallbacks = [];
         });
       }
-    };
-    script.onerror = (err) => {
-      console.error('reCAPTCHA script failed to load – promise will not resolve:', err);
     };
 
     return () => {
