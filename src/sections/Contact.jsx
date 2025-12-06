@@ -11,7 +11,7 @@ export function Contact() {
 
     // load reCAPTCHA v3 (standard) script dynamically with site key
     const script = document.createElement('script');
-    script.src = `https://www.google.com/recaptcha/enterprise.js?render=${encodeURIComponent(siteKey)}`;
+    script.src = `https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(siteKey)}`;
     script.async = true;
     script.defer = true;
     document.head.appendChild(script);
