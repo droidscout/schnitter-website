@@ -15,7 +15,7 @@ RUN rm -rf dist
 RUN test -n "$REPO_URL" || (echo "ERROR: REPO_URL build-arg not provided" && exit 1)
 
 # Shallow clone for speed; checkout ref if specified
-RUN git clone "$REPO_URL" /app
+RUN git clone "$REPO_URL" -b "$REPO_REF" /app
 
 # Install dependencies and build
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
