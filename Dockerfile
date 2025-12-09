@@ -5,7 +5,7 @@ RUN apk add --no-cache git
 
 # Build args: provide your repository URL and optional ref (branch/tag/commit)
 ARG REPO_URL="https://github.com/droidscout/schnitter-website.git"
-# ARG REPO_REF=master
+ARG REPO_REF=staging
 ARG VITE_API_BASE_URL
 ARG VITE_RECAPTCHA_SITE_KEY
 
