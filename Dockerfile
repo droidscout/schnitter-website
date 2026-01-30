@@ -1,17 +1,13 @@
 FROM node:20-alpine AS builder
 
-# Create non-root user
-RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
-
-# Copy local code instead of cloning
 # Set working directory
 WORKDIR /app
 
-# Copy local code with correct ownership
-COPY --chown=nodejs:nodejs . /app
+# Copy local code with correct ownership (using built-in 'node' user)
+COPY --chown=node:node . /app
 
-# Switch to non-root user
-USER nodejs
+# Switch to non-root user 'node' (uid 1000)
+USER node
 
 # Install dependencies and build
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
