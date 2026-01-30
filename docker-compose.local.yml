@@ -1,0 +1,43 @@
+services:
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    image: schnitter-api:local
+    env_file:
+      - ./.env
+
+    networks:
+      - app_net
+    healthcheck:
+      disable: true
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-/api}
+        VITE_RECAPTCHA_SITE_KEY: ${VITE_RECAPTCHA_SITE_KEY}
+    image: schnitter-web:local
+    ports:
+      - "8079:80"
+    networks:
+      - app_net
+    depends_on:
+      - api
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+networks:
+  app_net:
+    driver: overlay
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
