@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - staging
 
 jobs:
   deploy:
@@ -40,9 +41,9 @@ jobs:
           set -euo pipefail
           cd "$REMOTE_PROJECT_PATH"
 
-          echo "Fetching latest master..."
-          git fetch origin master
-          git reset --hard origin/master
+          echo "Fetching latest ${GITHUB_REF_NAME}..."
+          git fetch origin ${GITHUB_REF_NAME}
+          git reset --hard origin/${GITHUB_REF_NAME}
 
           echo "Removing existing stack (if any)..."
           if docker stack ls --format '{{.Name}}' | grep -Fxq "$STACK_NAME"; then
