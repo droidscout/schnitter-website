@@ -5,7 +5,6 @@ RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
 
 # Install git to fetch sources
 RUN apk add --no-cache git
-USER nodejs
 
 # Build args: provide your repository URL and optional ref (branch/tag/commit)
 ARG REPO_URL="https://github.com/droidscout/schnitter-website.git"
