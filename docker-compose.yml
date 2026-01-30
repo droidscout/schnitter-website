@@ -5,6 +5,8 @@ services:
       platforms:
         - linux/amd64
     image: droidscout/schnitter-api:1.0.4
+    env_file:
+      - ./server/.env
     environment:
       - CONTACT_RECEIVER_EMAIL=${CONTACT_RECEIVER_EMAIL:-ralph.loser@posteo.de}
       - FRONTEND_BASE_URL=${FRONTEND_BASE_URL:-http://localhost:8080}
@@ -22,8 +24,6 @@ services:
       - SMTP_PASS=${SMTP_PASS}
       - NODE_ENV=${NODE_ENV:-development}
       - TOKEN_TTL_MINUTES=${TOKEN_TTL_MINUTES:-60}
-    ports:
-      - "3000:3000"
     restart: unless-stopped
 
   web:

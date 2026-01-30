@@ -9,7 +9,7 @@ USER nodejs
 
 # Build args: provide your repository URL and optional ref (branch/tag/commit)
 ARG REPO_URL="https://github.com/droidscout/schnitter-website.git"
-# ARG REPO_REF=master
+ARG REPO_REF=staging
 ARG VITE_API_BASE_URL
 ARG VITE_RECAPTCHA_SITE_KEY
 
@@ -21,7 +21,7 @@ RUN rm -rf dist
 RUN test -n "$REPO_URL" || (echo "ERROR: REPO_URL build-arg not provided" && exit 1)
 
 # Shallow clone for speed; checkout ref if specified
-RUN git clone "$REPO_URL" /app
+RUN git clone "$REPO_URL" -b "$REPO_REF" /app
 
 # Install dependencies and build
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
