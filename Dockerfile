@@ -3,16 +3,14 @@ FROM node:20-alpine AS builder
 # Set working directory
 WORKDIR /app
 
-# Copy local code with correct ownership (using built-in 'node' user)
-COPY --chown=node:node . /app
-
-# Switch to non-root user 'node' (uid 1000)
-USER node
+# Copy local code (as root)
+COPY . /app
 
 # Install dependencies and build
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 ENV VITE_RECAPTCHA_SITE_KEY=${VITE_RECAPTCHA_SITE_KEY}
 ENV INLINE_RUNTIME_CHUNK=false
+# Use --unsafe-perm to allow root to own the installed modules (optional but safe here)
 RUN npm install --no-audit --no-fund
 RUN npm run build -dev
 
