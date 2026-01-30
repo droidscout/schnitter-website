@@ -99,7 +99,7 @@ jobs:
 
           echo "Deploying stack with version ${{ env.NEW_VERSION }}..."
           # We use --prune to remove orphaned services
-          docker stack deploy --prune -c "$COMPOSE_FILE_PATH" "$STACK_NAME"
+          docker stack deploy --prune --with-registry-auth -c "$COMPOSE_FILE_PATH" "$STACK_NAME"
           
           # Optional: Force update to ensure new images are pulled if the tag didn't change (though it did)
           # With unique tags, stack deploy should pick it up automatically.
