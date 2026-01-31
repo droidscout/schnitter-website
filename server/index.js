@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import nodemailer from 'nodemailer';
-import { v4 as uuidv4 } from 'uuid';
+import jwt from 'jsonwebtoken';
 
 const app = express();
 app.use(cors());
@@ -22,7 +22,6 @@ const API_SERVICE_SECRET = process.env.API_SERVICE_SECRET;
 
 // In-memory stores
 const rateStore = new Map();
-const tokens = new Map();
 
 function isAllowedSource(req) {
   if (process.env.NODE_ENV === 'development') return true; // allow all in dev
@@ -173,6 +172,9 @@ function makeTransporter() {
 
 const transporter = makeTransporter();
 
+// Config - JWT Secret reuse API_SERVICE_SECRET or fallback
+const JWT_SECRET = process.env.API_SERVICE_SECRET || 'dev-secret-do-not-use-in-prod';
+
 app.post('/api/contact', async (req, res) => {
   console.log('Received contact submission from', trueClientIp(req));
   // Enforce source IP restriction
@@ -189,10 +191,12 @@ app.post('/api/contact', async (req, res) => {
     return res.status(400).json({ ok: false, error: 'Name und E-Mail sind erforderlich.' });
   }
 
-  const token = uuidv4();
-  const now = Date.now();
-  tokens.set(token, { name, email, phone, message, createdAt: now });
-  console.log(`[DEBUG] Created token: ${token}. Total tokens: ${tokens.size}`);
+  // Generate Stateless JWT Token
+  // Embed all necessary data in the token
+  const payload = { name, email, phone, message };
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: `${TOKEN_TTL_MINUTES}m` });
+
+  console.log(`[DEBUG] Generated JWT for ${email}`);
 
   const confirmUrl = `${FRONTEND_BASE_URL.replace(/\/+$/, '')}/api/confirm?token=${token}`.replace('/api/confirm', '/api/confirm');
   // Note: confirm is served by this API; but user will hit it via NGINX proxy at same host
@@ -224,19 +228,18 @@ app.post('/api/contact', async (req, res) => {
 
 app.get('/api/confirm', async (req, res) => {
   const { token } = req.query;
-  console.log(`[DEBUG] /api/confirm called with token: ${token}`);
-  console.log(`[DEBUG] Current tokens in memory: ${tokens.size}`);
+  console.log(`[DEBUG] /api/confirm called with token length: ${token ? token.length : 0}`);
 
-  const record = tokens.get(token);
-  if (!record) {
-    console.warn(`[DEBUG] Token NOT found. Available tokens: ${[...tokens.keys()].join(', ')}`);
+  if (!token) return res.status(400).send('Kein Token enthalten.');
+
+  let record;
+  try {
+    // Verify and decode JWT
+    record = jwt.verify(token, JWT_SECRET);
+    console.log(`[DEBUG] JWT Verified for: ${record.email}`);
+  } catch (err) {
+    console.warn(`[DEBUG] JWT Verification failed:`, err.message);
     return res.status(400).send('Ungültiger oder abgelaufener Token.');
-  }
-
-  if (Date.now() - record.createdAt > TOKEN_TTL_MINUTES * 60 * 1000) {
-    console.warn(`[DEBUG] Token expired. CreatedAt: ${record.createdAt}, Now: ${Date.now()}`);
-    tokens.delete(token);
-    return res.status(400).send('Token abgelaufen.');
   }
 
   // Forward the enquiry to receiver
@@ -244,9 +247,7 @@ app.get('/api/confirm', async (req, res) => {
     await transporter.sendMail({
       from: ALLOWED_SENDER_EMAIL,
       to: CONTACT_RECEIVER_EMAIL,
-      // Route replies back to the original submitter
       replyTo: record.email,
-      // Enforce envelope MAIL FROM to be the authenticated/allowed sender
       envelope: { from: ALLOWED_SENDER_EMAIL, to: CONTACT_RECEIVER_EMAIL },
       subject: `Neue Kontaktanfrage von ${record.name}`,
       text: `Name: ${record.name}\nE-Mail: ${record.email}\nTelefon: ${record.phone || '-'}\n\nNachricht:\n${record.message || ''}`,
@@ -255,7 +256,6 @@ app.get('/api/confirm', async (req, res) => {
     console.error('Forward email error:', err);
   }
 
-  tokens.delete(token);
   // Redirect to thank-you page on frontend
   const target = `${FRONTEND_BASE_URL.replace(/\/+$/, '')}${THANK_YOU_PAGE_URL}`;
   res.redirect(302, target);
