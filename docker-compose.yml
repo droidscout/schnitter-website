@@ -5,13 +5,11 @@ services:
       platforms:
         - linux/amd64
     image: droidscout/schnitter-api:1.0.18
-    env_file:
-      - ./server/.env
     environment:
       - CONTACT_RECEIVER_EMAIL=${CONTACT_RECEIVER_EMAIL:-ralph.loser@posteo.de}
       - FRONTEND_BASE_URL=${FRONTEND_BASE_URL:-http://localhost:8080}
       - THANK_YOU_PAGE_URL=${THANK_YOU_PAGE_URL:-/danke}
-      - ALLOWED_SOURCE_IP=${ALLOWED_SOURCE_IP:-172.28.0.10} # supports single IPs, CIDR (e.g. 172.28.0.0/16) or ranges 172.28.0.5-172.28.0.20
+      - ALLOWED_SOURCE_IP=${ALLOWED_SOURCE_IP:-}
       - RATE_LIMIT_WINDOW_MS=${RATE_LIMIT_WINDOW_MS:-60000}
       - RATE_LIMIT_MAX=${RATE_LIMIT_MAX:-10}
       - RECAPTCHA_SECRET_KEY=${RECAPTCHA_SECRET_KEY}
