@@ -21,6 +21,13 @@ jobs:
       REMOTE_COMPOSE_FILE: ${{ secrets.REMOTE_COMPOSE_FILE }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      CONTACT_RECEIVER_EMAIL: ${{ secrets.CONTACT_RECEIVER_EMAIL }}
+      SMTP_HOST: ${{ secrets.SMTP_HOST }}
+      SMTP_PORT: ${{ secrets.SMTP_PORT }}
+      SMTP_SECURE: ${{ secrets.SMTP_SECURE }}
+      SMTP_AUTH_METHOD: ${{ secrets.SMTP_AUTH_METHOD }}
+      SMTP_USER: ${{ secrets.SMTP_USER }}
+      SMTP_PASS: ${{ secrets.SMTP_PASS }}
     
     steps:
       - name: Checkout code
@@ -92,6 +99,30 @@ jobs:
           ssh -p "$PORT" "$SSH_USER@$SSH_HOST" <<EOF
           set -euo pipefail
           cd "$REMOTE_PROJECT_PATH"
+
+          # Update .env with secrets
+          # We purposefully do not overwrite the file completely to preserve other values if present
+          touch .env
+          cp .env .env.bak || true
+          
+          # Remove existing entries for our secrets to avoid duplicates
+          grep -vE "^(CONTACT_RECEIVER_EMAIL|SMTP_HOST|SMTP_PORT|SMTP_SECURE|SMTP_AUTH_METHOD|SMTP_USER|SMTP_PASS)=" .env.bak > .env || true
+
+          # Append new secret values
+          cat <<ENV >> .env
+          CONTACT_RECEIVER_EMAIL=${CONTACT_RECEIVER_EMAIL}
+          SMTP_HOST=${SMTP_HOST}
+          SMTP_PORT=${SMTP_PORT}
+          SMTP_SECURE=${SMTP_SECURE}
+          SMTP_AUTH_METHOD=${SMTP_AUTH_METHOD}
+          SMTP_USER=${SMTP_USER}
+          SMTP_PASS=${SMTP_PASS}
+          ENV
+
+          # Source .env to make variables available to docker stack deploy
+          set -a
+          source .env
+          set +a
 
           echo "Logging into Docker Hub..."
           echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
