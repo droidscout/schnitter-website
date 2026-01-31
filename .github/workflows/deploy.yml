@@ -28,7 +28,6 @@ jobs:
       SMTP_AUTH_METHOD: ${{ secrets.SMTP_AUTH_METHOD }}
       SMTP_USER: ${{ secrets.SMTP_USER }}
       SMTP_PASS: ${{ secrets.SMTP_PASS }}
-      SMTP_PASS: ${{ secrets.SMTP_PASS }}
       API_SERVICE_SECRET: ${{ secrets.API_SERVICE_SECRET }}
       RECAPTCHA_SECRET_KEY: ${{ secrets.RECAPTCHA_SECRET_KEY }}
     
