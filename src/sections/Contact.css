@@ -78,7 +78,6 @@
   color: rgba(255, 255, 255, 0.76);
 }
 
-.contact__group input,
 .contact__group textarea {
   border-radius: 12px;
   border: 1px solid rgba(13, 30, 45, 0.18);
@@ -87,6 +86,20 @@
   color: var(--text);
   background: rgba(244, 247, 251, 0.7);
   transition: border 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+  min-height: 150px;
+  resize: vertical;
+}
+
+.contact__group input {
+  border-radius: 12px;
+  border: 1px solid rgba(13, 30, 45, 0.18);
+  padding: 0.85rem 1rem;
+  font: inherit;
+  color: var(--text);
+  background: rgba(244, 247, 251, 0.7);
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
 }
 
 .contact__group input:focus,
