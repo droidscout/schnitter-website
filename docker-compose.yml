@@ -33,7 +33,7 @@ services:
       replicas: 1
       placement:
         constraints:
-          - node.hostname == v10033.1blu.de
+          - node.hostname != rlox.de
     restart: unless-stopped
 
   web:
@@ -64,7 +64,7 @@ services:
       replicas: 1
       placement:
         constraints:
-          - node.hostname == v10033.1blu.de
+          - node.hostname != rlox.de
     restart: unless-stopped
 
 networks:
