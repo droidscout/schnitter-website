@@ -18,8 +18,8 @@ RUN npm run build -dev
 
 FROM nginx:alpine AS runner
 
-# NGINX configuration for SPA routing
-COPY infra/nginx.conf /etc/nginx/conf.d/default.conf
+# NGINX configuration for SPA routing (using templates for env var substitution)
+COPY infra/nginx.conf /etc/nginx/templates/default.conf.template
 
 # Copy .env file
 

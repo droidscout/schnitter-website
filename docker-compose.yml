@@ -11,7 +11,7 @@ services:
       - CONTACT_RECEIVER_EMAIL=${CONTACT_RECEIVER_EMAIL:-ralph.loser@posteo.de}
       - FRONTEND_BASE_URL=${FRONTEND_BASE_URL:-http://localhost:8080}
       - THANK_YOU_PAGE_URL=${THANK_YOU_PAGE_URL:-/danke}
-      - ALLOWED_SOURCE_IP=${ALLOWED_SOURCE_IP:-}
+      - API_SERVICE_SECRET=${API_SERVICE_SECRET}
       - RATE_LIMIT_WINDOW_MS=${RATE_LIMIT_WINDOW_MS:-60000}
       - RATE_LIMIT_MAX=${RATE_LIMIT_MAX:-10}
       - RECAPTCHA_SECRET_KEY=${RECAPTCHA_SECRET_KEY}
@@ -50,6 +50,8 @@ services:
       platforms:
         - linux/amd64
     image: droidscout/schnitter-web:1.0.19
+    environment:
+      - API_SERVICE_SECRET=${API_SERVICE_SECRET}
     ports:
       - "8079:80"
     depends_on:

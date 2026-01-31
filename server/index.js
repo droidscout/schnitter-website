@@ -11,114 +11,24 @@ const FRONTEND_BASE_URL = process.env.FRONTEND_BASE_URL || 'http://localhost:807
 const THANK_YOU_PAGE_URL = process.env.THANK_YOU_PAGE_URL || '/danke';
 const CONTACT_RECEIVER_EMAIL = process.env.CONTACT_RECEIVER_EMAIL || 'haustechnik@schnittergbr.de';
 const TOKEN_TTL_MINUTES = parseInt(process.env.TOKEN_TTL_MINUTES || '60', 10);
-// Use authenticated SMTP user (or fallback) as allowed sender for MAIL FROM
-const ALLOWED_SENDER_EMAIL = process.env.SMTP_USER || CONTACT_RECEIVER_EMAIL;
 
-// CORS: allow frontend origin + handle preflight
-const corsOptions = { origin: new URL(FRONTEND_BASE_URL).origin, credentials: false };
-app.use(cors(corsOptions));
-app.options('/api/*', cors(corsOptions));
-app.use(express.json());
-
-// In-memory token store
-const tokens = new Map();
-
-// In-memory rate limiter (IP-based)
-const RATE_LIMIT_WINDOW_MS = Number(process.env.RATE_LIMIT_WINDOW_MS || 60_000);
-const RATE_LIMIT_MAX = Number(process.env.RATE_LIMIT_MAX || 10);
-const rateStore = new Map(); // ip -> { count, resetAt }
-
-function normalizeIp(ip) {
-  if (!ip) return '';
-  // strip IPv6 mapped prefix ::ffff:
-  return ip.replace(/^::ffff:/, '');
-}
-
-function clientSourceIp(req) {
-  // Use the socket remote address to enforce container-level IP restrictions
-  return normalizeIp(req.socket?.remoteAddress || req.ip || '');
-}
-
-function ipToInt(ip) {
-  const octets = ip.split('.');
-  if (octets.length !== 4) return null;
-  const bytes = octets.map((part) => Number(part));
-  if (bytes.some((byte) => Number.isNaN(byte) || byte < 0 || byte > 255)) return null;
-  return bytes.reduce((acc, byte) => acc * 256 + byte, 0);
-}
-
-function parseCidrRange(entry) {
-  const [ipPart, prefixPart] = entry.split('/');
-  if (!ipPart || !prefixPart) return null;
-  const prefix = Number(prefixPart);
-  if (!Number.isInteger(prefix) || prefix < 0 || prefix > 32) return null;
-  const baseIp = normalizeIp(ipPart.trim());
-  const baseInt = ipToInt(baseIp);
-  if (baseInt === null) return null;
-  const blockSize = 2 ** (32 - prefix);
-  const start = Math.floor(baseInt / blockSize) * blockSize;
-  const end = start + blockSize - 1;
-  return { type: 'range', start, end };
-}
-
-function parseDashRange(entry) {
-  const [startRaw, endRaw] = entry.split('-');
-  if (!startRaw || !endRaw) return null;
-  const startInt = ipToInt(normalizeIp(startRaw.trim()));
-  const endInt = ipToInt(normalizeIp(endRaw.trim()));
-  if (startInt === null || endInt === null) return null;
-  return {
-    type: 'range',
-    start: Math.min(startInt, endInt),
-    end: Math.max(startInt, endInt),
-  };
-}
-
-function parseAllowedSourceRules(value) {
-  if (!value) return [];
-  const entries = value.split(/[,;\n]+/).map((entry) => entry.trim()).filter(Boolean);
-  const rules = [];
-  for (const entry of entries) {
-    let rule = null;
-    if (entry.includes('/')) {
-      rule = parseCidrRange(entry);
-    } else if (entry.includes('-')) {
-      rule = parseDashRange(entry);
-    } else {
-      const literal = normalizeIp(entry);
-      const ipInt = ipToInt(literal);
-      rule = ipInt === null ? { type: 'literal', value: literal } : { type: 'range', start: ipInt, end: ipInt };
-    }
-    if (rule) {
-      rules.push(rule);
-    } else {
-      console.warn(`Ignoring invalid ALLOWED_SOURCE_IP entry: "${entry}"`);
-    }
-  }
-  return rules;
-}
-
-function matchAllowedSource(ip, rules) {
-  const normalized = normalizeIp(ip);
-  const ipv4Int = ipToInt(normalized);
-  return rules.some((rule) => {
-    if (rule.type === 'range') {
-      return ipv4Int !== null && ipv4Int >= rule.start && ipv4Int <= rule.end;
-    }
-    return normalized === rule.value;
-  });
-}
-
-const allowedSourceRules = parseAllowedSourceRules(process.env.ALLOWED_SOURCE_IP || '');
+const API_SERVICE_SECRET = process.env.API_SERVICE_SECRET;
 
 function isAllowedSource(req) {
-  if(process.env.NODE_ENV === 'development') return true; // allow all in dev
-  const src = clientSourceIp(req);
-  if (!allowedSourceRules.length) return true; // no restriction configured
-  if (matchAllowedSource(src, allowedSourceRules)) return true;
-  // allow localhost in non-production for local dev/testing
-  if (process.env.NODE_ENV !== 'production' && (src === '127.0.0.1' || src === '::1')) return true;
-  return false;
+  if (process.env.NODE_ENV === 'development') return true; // allow all in dev
+
+  // If no secret is configured in production, we block mostly everything to be safe,
+  // or you could choose to fail open if strictly necessary (not recommended).
+  if (!API_SERVICE_SECRET) {
+    console.error('API_SERVICE_SECRET not configured in production. Rejecting request.');
+    return false;
+  }
+
+  const authHeader = req.headers['x-service-auth'];
+  if (!authHeader) return false;
+
+  // Constant-time comparison to avoid timing attacks
+  return authHeader === API_SERVICE_SECRET;
 }
 
 function trueClientIp(req) {
@@ -153,8 +63,8 @@ async function verifyRecaptcha(token, remoteIp) {
   const secret = process.env.RECAPTCHA_SECRET_KEY;
   console.log('RECAPTCHA_SECRET_KEY present:', !!secret);
   if (!secret) {
-     console.log('No RECAPTCHA secret set – allowing request without verification.');
-     return { ok: true }; // allow if not configured
+    console.log('No RECAPTCHA secret set – allowing request without verification.');
+    return { ok: true }; // allow if not configured
   }
   if (!token) {
     console.warn('No reCAPTCHA token provided.');
@@ -267,7 +177,7 @@ app.post('/api/contact', async (req, res) => {
   const now = Date.now();
   tokens.set(token, { name, email, phone, message, createdAt: now });
 
-  const confirmUrl = `${FRONTEND_BASE_URL.replace(/\/+$/, '')}/api/confirm?token=${token}`.replace('/api/confirm','/api/confirm');
+  const confirmUrl = `${FRONTEND_BASE_URL.replace(/\/+$/, '')}/api/confirm?token=${token}`.replace('/api/confirm', '/api/confirm');
   // Note: confirm is served by this API; but user will hit it via NGINX proxy at same host
 
   const mail = {
