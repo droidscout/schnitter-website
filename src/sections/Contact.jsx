@@ -43,14 +43,22 @@ export function Contact() {
   }, [siteKey]);
 
   async function getRecaptchaToken() {
-    if (!siteKey) return null;
+    if (!siteKey) {
+      console.warn('reCAPTCHA siteKey is missing/empty');
+      return null;
+    }
     // ensure grecaptcha is ready
     if (recaptchaReadyRef.current) await recaptchaReadyRef.current;
-    if (!(window.grecaptcha && window.grecaptcha.execute)) return null;
+    if (!(window.grecaptcha && window.grecaptcha.execute)) {
+      console.error('grecaptcha not available or execute missing');
+      return null;
+    }
     try {
+      console.log('Executing reCAPTCHA with key length:', siteKey.length);
       const token = await window.grecaptcha.execute(siteKey, { action: 'login' });
       return token;
-    } catch (_) {
+    } catch (error) {
+      console.error('reCAPTCHA execute failed:', error);
       return null;
     }
   }
@@ -89,7 +97,7 @@ export function Contact() {
           <div className="contact__options">
             <div>
               <h3>Telefon</h3>
-            <a href="tel:+498936109524">089 361 095 24</a>
+              <a href="tel:+498936109524">089 361 095 24</a>
             </div>
             <div>
               <h3>Email</h3>
@@ -112,7 +120,7 @@ export function Contact() {
           </div>
           <div className="contact__group">
             <label htmlFor="phone">Telefonnummer</label>
-            <input id="phone" name="phone" type="tel"/>
+            <input id="phone" name="phone" type="tel" />
           </div>
           <div className="contact__group">
             <label htmlFor="message">Ihre Nachricht</label>
