@@ -14,7 +14,7 @@ ENV VITE_RECAPTCHA_SITE_KEY=${VITE_RECAPTCHA_SITE_KEY}
 ENV INLINE_RUNTIME_CHUNK=false
 # Use --unsafe-perm to allow root to own the installed modules (optional but safe here)
 RUN npm install --no-audit --no-fund
-RUN npm run build -dev
+RUN npm run build
 
 FROM nginx:alpine AS runner
 
