@@ -31,6 +31,12 @@ function isAllowedSource(req) {
   return authHeader === API_SERVICE_SECRET;
 }
 
+function normalizeIp(ip) {
+  if (!ip) return '';
+  // strip IPv6 mapped prefix ::ffff:
+  return ip.replace(/^::ffff:/, '');
+}
+
 function trueClientIp(req) {
   const xff = req.headers['x-forwarded-for'];
   if (typeof xff === 'string' && xff.length) {
