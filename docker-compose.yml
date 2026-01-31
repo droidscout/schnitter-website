@@ -4,7 +4,7 @@ services:
       context: ./server
       platforms:
         - linux/amd64
-    image: droidscout/schnitter-api:1.0.28
+    image: droidscout/schnitter-api:1.0.29
     env_file:
       - ./server/.env
     environment:
