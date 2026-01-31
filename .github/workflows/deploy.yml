@@ -28,7 +28,9 @@ jobs:
       SMTP_AUTH_METHOD: ${{ secrets.SMTP_AUTH_METHOD }}
       SMTP_USER: ${{ secrets.SMTP_USER }}
       SMTP_PASS: ${{ secrets.SMTP_PASS }}
+      SMTP_PASS: ${{ secrets.SMTP_PASS }}
       API_SERVICE_SECRET: ${{ secrets.API_SERVICE_SECRET }}
+      RECAPTCHA_SECRET_KEY: ${{ secrets.RECAPTCHA_SECRET_KEY }}
     
     steps:
       - name: Checkout code
@@ -109,7 +111,7 @@ jobs:
           
           # Remove existing entries for our secrets to avoid duplicates
           # Remove existing entries for our secrets to avoid duplicates
-          grep -vE "^(CONTACT_RECEIVER_EMAIL|SMTP_HOST|SMTP_PORT|SMTP_SECURE|SMTP_AUTH_METHOD|SMTP_USER|SMTP_PASS|API_SERVICE_SECRET)=" .env.bak > .env || true
+          grep -vE "^(CONTACT_RECEIVER_EMAIL|SMTP_HOST|SMTP_PORT|SMTP_SECURE|SMTP_AUTH_METHOD|SMTP_USER|SMTP_PASS|API_SERVICE_SECRET|RECAPTCHA_SECRET_KEY)=" .env.bak > .env || true
 
           # Append new secret values
           cat <<ENV >> .env
@@ -120,7 +122,9 @@ jobs:
           SMTP_AUTH_METHOD=${SMTP_AUTH_METHOD}
           SMTP_USER=${SMTP_USER}
           SMTP_PASS=${SMTP_PASS}
+          SMTP_PASS=${SMTP_PASS}
           API_SERVICE_SECRET=${API_SERVICE_SECRET}
+          RECAPTCHA_SECRET_KEY=${RECAPTCHA_SECRET_KEY}
           ENV
 
           # Source .env to make variables available to docker stack deploy
