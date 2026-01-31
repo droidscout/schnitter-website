@@ -192,6 +192,7 @@ app.post('/api/contact', async (req, res) => {
   const token = uuidv4();
   const now = Date.now();
   tokens.set(token, { name, email, phone, message, createdAt: now });
+  console.log(`[DEBUG] Created token: ${token}. Total tokens: ${tokens.size}`);
 
   const confirmUrl = `${FRONTEND_BASE_URL.replace(/\/+$/, '')}/api/confirm?token=${token}`.replace('/api/confirm', '/api/confirm');
   // Note: confirm is served by this API; but user will hit it via NGINX proxy at same host
@@ -223,12 +224,21 @@ app.post('/api/contact', async (req, res) => {
 
 app.get('/api/confirm', async (req, res) => {
   const { token } = req.query;
+  console.log(`[DEBUG] /api/confirm called with token: ${token}`);
+  console.log(`[DEBUG] Current tokens in memory: ${tokens.size}`);
+
   const record = tokens.get(token);
-  if (!record) return res.status(400).send('Ungültiger oder abgelaufener Token.');
+  if (!record) {
+    console.warn(`[DEBUG] Token NOT found. Available tokens: ${[...tokens.keys()].join(', ')}`);
+    return res.status(400).send('Ungültiger oder abgelaufener Token.');
+  }
+
   if (Date.now() - record.createdAt > TOKEN_TTL_MINUTES * 60 * 1000) {
+    console.warn(`[DEBUG] Token expired. CreatedAt: ${record.createdAt}, Now: ${Date.now()}`);
     tokens.delete(token);
     return res.status(400).send('Token abgelaufen.');
   }
+
   // Forward the enquiry to receiver
   try {
     await transporter.sendMail({
@@ -253,4 +263,7 @@ app.get('/api/confirm', async (req, res) => {
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 
-app.listen(PORT, () => console.log(`Contact API listening on :${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Contact API listening on :${PORT}`);
+  console.log(`[DEBUG] Server started at ${new Date().toISOString()}`);
+});
