@@ -41,3 +41,47 @@ Compatibility & Fallbacks
 Known Notes
 - Smooth scrolling with sticky header is handled in `src/main.jsx` and remains compatible with the overlay.
 
+
+## Deployment & CI/CD
+This project uses **GitHub Actions** for automated deployment to a Docker Swarm cluster. The workflow is defined in `.github/workflows/deploy.yml`.
+
+### Workflow Steps
+1.  **Trigger**: Pushes to `master` or `staging` branches.
+2.  **Version Bump**: Automatically increments the version patch level in `package.json` (or via `scripts/bump_version.sh`).
+3.  **Build & Push**: Builds Docker images for `api` and `web`, tagged with the new version, and pushes them to Docker Hub.
+4.  **Git Commit**: Commits the version bump back to the repository.
+5.  **Remote Deployment**: Connects to the Docker Swarm manager via SSH, updates the `.env` file with secrets, and redeploys the stack using `docker stack deploy`.
+
+### Environment Variables & Secrets
+The following secrets must be set in the GitHub Repository Settings for the workflow to function:
+
+| Variable | Description |
+| :--- | :--- |
+| **Infrastructure** | |
+| `SSH_HOST` | Hostname/IP of the Docker Swarm Manager |
+| `SSH_USER` | SSH Username (e.g., `ralph`) |
+| `SSH_PRIVATE_KEY` | SSH Private Key for passwordless access |
+| `SSH_PORT` | SSH Port (default: 22) |
+| `REMOTE_PROJECT_PATH` | Path on the remote server where the project is located |
+| `STACK_NAME` | Name of the Docker Stack (e.g., `schnitter-web`) |
+| **Docker** | |
+| `DOCKER_USERNAME` | Docker Hub Username |
+| `DOCKER_PASSWORD` | Docker Hub Access Token |
+| **Application Config** | |
+| `CONTACT_RECEIVER_EMAIL` | Email address receiving contact form submissions |
+| `VITE_API_BASE_URL` | Base URL for the API (used in Frontend Build) |
+| `VITE_RECAPTCHA_SITE_KEY` | Google reCAPTCHA Site Key (Frontend) |
+| `RECAPTCHA_SECRET_KEY` | Google reCAPTCHA Secret Key (Backend) |
+| **SMTP (Email Sending)** | |
+| `SMTP_HOST` | SMTP Server Hostname |
+| `SMTP_PORT` | SMTP Port (e.g., 587) |
+| `SMTP_SECURE` | `true` for SSL/TLS, `false` for STARTTLS |
+| `SMTP_USER` | SMTP Username |
+| `SMTP_PASS` | SMTP Password |
+| `SMTP_AUTH_METHOD` | Auth method (default: `LOGIN`) |
+
+### Local Development
+To run the project locally:
+1.  Copy `server/.env.example` to `server/.env` and fill in the values.
+2.  Run `docker compose up -d --build`.
+3.  Access the site at `http://localhost:8080`.
