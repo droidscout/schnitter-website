@@ -50,6 +50,8 @@ services:
       platforms:
         - linux/amd64
     image: droidscout/schnitter-web:1.0.22
+    environment:
+      - API_SERVICE_SECRET=${API_SERVICE_SECRET}
     ports:
       - "8079:80"
     depends_on:
