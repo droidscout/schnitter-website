@@ -12,7 +12,15 @@ const THANK_YOU_PAGE_URL = process.env.THANK_YOU_PAGE_URL || '/danke';
 const CONTACT_RECEIVER_EMAIL = process.env.CONTACT_RECEIVER_EMAIL || 'haustechnik@schnittergbr.de';
 const TOKEN_TTL_MINUTES = parseInt(process.env.TOKEN_TTL_MINUTES || '60', 10);
 
+const RATE_LIMIT_WINDOW_MS = parseInt(process.env.RATE_LIMIT_WINDOW_MS || '60000', 10);
+const RATE_LIMIT_MAX = parseInt(process.env.RATE_LIMIT_MAX || '10', 10);
+const ALLOWED_SENDER_EMAIL = process.env.ALLOWED_SENDER_EMAIL || process.env.SMTP_USER || 'website@schnittergbr.de';
+
 const API_SERVICE_SECRET = process.env.API_SERVICE_SECRET;
+
+// In-memory stores
+const rateStore = new Map();
+const tokens = new Map();
 
 function isAllowedSource(req) {
   if (process.env.NODE_ENV === 'development') return true; // allow all in dev
