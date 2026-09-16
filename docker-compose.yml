@@ -5,8 +5,6 @@ services:
       platforms:
         - linux/amd64
     image: droidscout/schnitter-api:1.0.38
-    env_file:
-      - ./server/.env
     environment:
       - CONTACT_RECEIVER_EMAIL=${CONTACT_RECEIVER_EMAIL:-ralph.loser@posteo.de}
       - FRONTEND_BASE_URL=${FRONTEND_BASE_URL:-http://localhost:8080}
