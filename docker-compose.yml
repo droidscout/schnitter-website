@@ -31,6 +31,11 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+      placement:
+        # rlox.de hat verwaiste vxlan-Interfaces fuer 10.0.1.0/24; Tasks werden
+        # dort mit "network sandbox join failed" abgewiesen.
+        constraints:
+          - node.hostname != rlox.de
     restart: unless-stopped
 
   web:
@@ -61,6 +66,11 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+      placement:
+        # rlox.de hat verwaiste vxlan-Interfaces fuer 10.0.1.0/24; Tasks werden
+        # dort mit "network sandbox join failed" abgewiesen.
+        constraints:
+          - node.hostname != rlox.de
     restart: unless-stopped
 
 networks:

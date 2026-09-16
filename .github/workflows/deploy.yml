@@ -97,36 +97,57 @@ jobs:
       - name: Deploy stack
         shell: bash
         run: |
+          set -euo pipefail
           PORT=${SSH_PORT:-22}
           COMPOSE_FILE_PATH=${REMOTE_COMPOSE_FILE:-docker-compose.yml}
-          
+
+          # Fail fast on missing secrets. Previously an unset secret was written
+          # to .env as an empty value, which silently disabled the feature it
+          # belonged to (e.g. RECAPTCHA_SECRET_KEY turning off captcha checks).
+          missing=()
+          for var in CONTACT_RECEIVER_EMAIL FRONTEND_BASE_URL SMTP_HOST SMTP_PORT \
+                     SMTP_SECURE SMTP_AUTH_METHOD SMTP_USER SMTP_PASS \
+                     API_SERVICE_SECRET RECAPTCHA_SECRET_KEY; do
+            [ -n "${!var:-}" ] || missing+=("$var")
+          done
+          if [ "${#missing[@]}" -gt 0 ]; then
+            echo "::error::Missing repository secrets: ${missing[*]}"
+            exit 1
+          fi
+
+          # Render the .env fragment here, with every value single-quoted, so
+          # that special characters in passwords survive `source` on the remote
+          # host. Shipped as base64 because that is safe inside the ssh heredoc.
+          quote() {
+            local esc=${2//\'/\'\\\'\'}
+            printf "%s='%s'\n" "$1" "$esc"
+          }
+          ENV_B64=$(
+            {
+              quote CONTACT_RECEIVER_EMAIL "$CONTACT_RECEIVER_EMAIL"
+              quote FRONTEND_BASE_URL      "$FRONTEND_BASE_URL"
+              quote SMTP_HOST              "$SMTP_HOST"
+              quote SMTP_PORT              "$SMTP_PORT"
+              quote SMTP_SECURE            "$SMTP_SECURE"
+              quote SMTP_AUTH_METHOD       "$SMTP_AUTH_METHOD"
+              quote SMTP_USER              "$SMTP_USER"
+              quote SMTP_PASS              "$SMTP_PASS"
+              quote API_SERVICE_SECRET     "$API_SERVICE_SECRET"
+              quote RECAPTCHA_SECRET_KEY   "$RECAPTCHA_SECRET_KEY"
+            } | base64 -w0
+          )
+
           ssh -p "$PORT" "$SSH_USER@$SSH_HOST" <<EOF
           set -euo pipefail
           cd "$REMOTE_PROJECT_PATH"
 
-          # Update .env with secrets
-          # We purposefully do not overwrite the file completely to preserve other values if present
+          # Keep unmanaged entries, replace the ones we own.
           touch .env
           cp .env .env.bak || true
-          
-          # Remove existing entries for our secrets to avoid duplicates
-          # Remove existing entries for our secrets to avoid duplicates
+          chmod 600 .env .env.bak
           grep -vE "^(CONTACT_RECEIVER_EMAIL|FRONTEND_BASE_URL|SMTP_HOST|SMTP_PORT|SMTP_SECURE|SMTP_AUTH_METHOD|SMTP_USER|SMTP_PASS|API_SERVICE_SECRET|RECAPTCHA_SECRET_KEY)=" .env.bak > .env || true
-
-          # Append new secret values
-          cat <<ENV >> .env
-          CONTACT_RECEIVER_EMAIL=${CONTACT_RECEIVER_EMAIL}
-          FRONTEND_BASE_URL=${FRONTEND_BASE_URL}
-          SMTP_HOST=${SMTP_HOST}
-          SMTP_PORT=${SMTP_PORT}
-          SMTP_SECURE=${SMTP_SECURE}
-          SMTP_AUTH_METHOD=${SMTP_AUTH_METHOD}
-          SMTP_USER=${SMTP_USER}
-          SMTP_PASS=${SMTP_PASS}
-          SMTP_PASS=${SMTP_PASS}
-          API_SERVICE_SECRET=${API_SERVICE_SECRET}
-          RECAPTCHA_SECRET_KEY=${RECAPTCHA_SECRET_KEY}
-          ENV
+          printf %s "$ENV_B64" | base64 -d >> .env
+          chmod 600 .env
 
           # Source .env to make variables available to docker stack deploy
           set -a
@@ -143,7 +164,4 @@ jobs:
           echo "Deploying stack with version ${{ env.NEW_VERSION }}..."
           # We use --prune to remove orphaned services
           docker stack deploy --prune --with-registry-auth -c "$COMPOSE_FILE_PATH" "$STACK_NAME"
-          
-          # Optional: Force update to ensure new images are pulled if the tag didn't change (though it did)
-          # With unique tags, stack deploy should pick it up automatically.
           EOF
