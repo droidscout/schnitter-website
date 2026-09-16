@@ -115,9 +115,9 @@ jobs:
             exit 1
           fi
 
-          # Render the .env fragment here, with every value single-quoted, so
-          # that special characters in passwords survive `source` on the remote
-          # host. Shipped as base64 because that is safe inside the ssh heredoc.
+          # Render the secrets here, with every value single-quoted, so that
+          # special characters survive `source` on the remote host. Shipped
+          # as base64 because that is safe inside the ssh heredoc.
           quote() {
             local esc=${2//\'/\'\\\'\'}
             printf "%s='%s'\n" "$1" "$esc"
@@ -141,17 +141,12 @@ jobs:
           set -euo pipefail
           cd "$REMOTE_PROJECT_PATH"
 
-          # Keep unmanaged entries, replace the ones we own.
-          touch .env
-          cp .env .env.bak || true
-          chmod 600 .env .env.bak
-          grep -vE "^(CONTACT_RECEIVER_EMAIL|FRONTEND_BASE_URL|SMTP_HOST|SMTP_PORT|SMTP_SECURE|SMTP_AUTH_METHOD|SMTP_USER|SMTP_PASS|API_SERVICE_SECRET|RECAPTCHA_SECRET_KEY)=" .env.bak > .env || true
-          printf %s "$ENV_B64" | base64 -d >> .env
-          chmod 600 .env
-
-          # Source .env to make variables available to docker stack deploy
+          # Load the secrets straight into this shell's environment so that
+          # "docker stack deploy" can interpolate them below. Nothing is
+          # written to disk -- the values only exist for the lifetime of
+          # this SSH session.
           set -a
-          source .env
+          source <(printf %s "$ENV_B64" | base64 -d)
           set +a
 
           echo "Logging into Docker Hub..."
